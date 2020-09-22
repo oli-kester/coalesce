@@ -10,7 +10,7 @@ const COLOUR_SCHEME = {
   'Bright Blue': '#44c5c5',
 };
 
-export const ColourSchemeContext = React.createContext(COLOUR_SCHEME);
+const ColourSchemeContext = React.createContext(COLOUR_SCHEME);
 
 function Coalesce() {
   return (
