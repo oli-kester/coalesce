@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayerSprite from './sprites/playerSprite';
+import PlayerSprite from './sprites/PlayerSprite';
 
 function GameCanvas() {
   return (

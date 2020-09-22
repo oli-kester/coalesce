@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+// import ColourSchemeContext from '../Coalesce';
 
 const PLAYER_SPRITE_STARTING_RADIUS = 12;
 
 // TODO breathing effects on player sprite
 
 function PlayerSprite(props) {
+  const ColourScheme = useContext(ColourSchemeContext);
+
   const { xPosStart, yPosStart } = props;
 
   const [xPos, setXPos] = useState(xPosStart);
@@ -14,7 +17,7 @@ function PlayerSprite(props) {
 
   return (
     <svg width="100%" height="100%">
-      <circle cx={xPos} cy={yPos} r={radius} fill="#44c5c5" />
+      <circle cx={xPos} cy={yPos} r={radius} fill={ColourScheme['light-gray']} />
     </svg>
   );
 }
