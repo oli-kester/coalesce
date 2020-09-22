@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import ColourSchemeContext from '../Coalesce';
+import { ColourSchemeContext } from '../Coalesce';
 
 const PLAYER_SPRITE_STARTING_RADIUS = 12;
 
@@ -16,9 +16,12 @@ function PlayerSprite(props) {
   const [radius, setRadius] = useState(PLAYER_SPRITE_STARTING_RADIUS);
 
   return (
-    <svg width="100%" height="100%">
-      <circle cx={xPos} cy={yPos} r={radius} />
-    </svg>
+    <div>
+      <svg width="100%" height="100%">
+        <circle cx={xPos} cy={yPos} r={radius} />
+      </svg>
+      <p>{ColourScheme}</p>
+    </div>
   );
 }
 
