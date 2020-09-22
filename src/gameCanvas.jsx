@@ -2,7 +2,9 @@ import React from 'react';
 
 function GameCanvas() {
   return (
-    <div>Test</div>
+    <div className="canvas">
+        {/* <PlayerSprite /> */}
+    </div>
   );
 }
 

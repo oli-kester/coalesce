@@ -1,0 +1,23 @@
+/* Static styles for Coalesce */
+
+body {
+    background-color: #222;  
+    text-align: center;
+    color: rgb(219, 218, 218);
+    letter-spacing: 2px;
+}
+
+h1 {
+    margin: 0px;
+}
+
+h2 {
+    font-style: italic;
+}
+
+.canvas {
+    background-color: #111;
+     width: 500px;
+     height: 500px;
+     margin: 20px auto 50px auto;
+}
