@@ -16,12 +16,9 @@ function PlayerSprite(props) {
   const [radius, setRadius] = useState(PLAYER_SPRITE_STARTING_RADIUS);
 
   return (
-    <div>
-      <svg width="100%" height="100%">
-        <circle cx={xPos} cy={yPos} r={radius} />
-      </svg>
-      <p>{ColourScheme}</p>
-    </div>
+    <svg width="100%" height="100%">
+      <circle cx={xPos} cy={yPos} r={radius} fill={ColourScheme.White} />
+    </svg>
   );
 }
 
