@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ColourSchemeContext } from '../Coalesce';
 
 const PLAYER_SPRITE_STARTING_RADIUS = 12;
+const SPEED_FACTOR = 1;
 
 // TODO breathing effects on player sprite
 
@@ -18,6 +19,11 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
     LEFT: false,
     RIGHT: false,
   });
+
+  // move sprite
+  if (movementStatus.UP) {
+    setYPos(yPos - SPEED_FACTOR);
+  }
 
   function keyDown(event) {
     const currMovementStatus = movementStatus;
