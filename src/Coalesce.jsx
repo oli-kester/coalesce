@@ -18,12 +18,14 @@ function Coalesce() {
   const [clock, setClock] = useState(Date.now());
 
   useEffect(() => {
-    const timer = setInterval(() => setClock(Date.now(), UPDATE_INTERVAL));
+    const timer = setInterval(() => {
+      setClock(Date.now());
+    }, UPDATE_INTERVAL);
 
-    return () => {
+    return (() => {
       clearInterval(timer);
-    };
-  });
+    });
+  }, [clock]);
 
   return (
     <ColourSchemeContext.Provider value={COLOUR_SCHEME}>

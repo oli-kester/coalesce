@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ColourSchemeContext } from '../Coalesce';
 
@@ -7,8 +7,16 @@ const SPEED_FACTOR = 1;
 
 // TODO breathing effects on player sprite
 
+// TODO switch to internal, synced clock.
+
 function PlayerSprite({ xPosStart, yPosStart, clock }) {
   const ColourScheme = useContext(ColourSchemeContext);
+
+  const prevClockRef = useRef();
+  useEffect(() => {
+    prevClockRef.current = clock;
+  });
+  const prevClock = prevClockRef.current;
 
   const [xPos, setXPos] = useState(xPosStart);
   const [yPos, setYPos] = useState(yPosStart);
@@ -19,11 +27,6 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
     LEFT: false,
     RIGHT: false,
   });
-
-  // move sprite
-  if (movementStatus.UP) {
-    setYPos(yPos - SPEED_FACTOR);
-  }
 
   function keyDown(event) {
     const currMovementStatus = movementStatus;
@@ -69,6 +72,13 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
     }
 
     setMovementStatus(currMovementStatus);
+  }
+
+  // move sprite
+  // TODO figure out a way to stop this immediately re-executing
+  if (movementStatus.UP && clock !== prevClock) {
+    console.log(`Setting yPos to ${yPos - 1}`);
+    setYPos(yPos - 1);
   }
 
   return (
