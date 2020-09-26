@@ -72,7 +72,7 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
   }
 
   return (
-    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp}>
+    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0}>
       <circle cx={xPos} cy={yPos} r={radius} fill={ColourScheme.White} />
     </svg>
   );
