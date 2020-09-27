@@ -1,15 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import PlayerSprite from './sprites/PlayerSprite';
+import React from "react";
+import PropTypes from "prop-types";
+import PlayerSprite from "./sprites/playerSprite";
 
-function GameCanvas({ clock }) {
+function GameCanvas({}) {
+  const clock = Date.now();
   return (
     <div className="canvas">
       <PlayerSprite xPosStart={250} yPosStart={250} clock={clock} />
-      <h2>
-        Clock count (ms) -
-        {clock}
-      </h2>
+      <h2>Clock count (ms) -{clock}</h2>
     </div>
   );
 }
