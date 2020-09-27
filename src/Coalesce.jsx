@@ -25,7 +25,7 @@ function Coalesce() {
     return () => {
       clearInterval(timer);
     };
-  });
+  }); /// D_ The fact that this is using an interval which is setting state will cause the component to rerender. No need to check for a change in 'clock.'
 
   return (
     <ColourSchemeContext.Provider value={COLOUR_SCHEME}>
