@@ -33,6 +33,7 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
     switch (event.key) {
       case "ArrowUp":
         currMovementStatus.UP = true;
+        console.log(`Setting yPos to ${yPos - 1}`);
         setYPos(yPos - 1);
         break;
       case "ArrowDown":
@@ -76,10 +77,7 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
   // move sprite
   // TODO figure out a way to stop this immediately re-executing
   if (movementStatus.UP && clock !== prevClock) {
-    /// D_ This condition will fire way too many times.
-    /// It is evaluated every render, and setting state causes a rerender itself; resulting in way too many renders. You should rethink your key press handler function logic I'd say.
-    /// Good idea with the switch statements but the need for that movementStatus obj seems a bit unnecessary to me. And without it, perhaps just one key handler is needed.
-    /// Something like I've added on line 36 is the way to go. There you can add your extra logic to check for the clock, if that's what you wanted to acheive.
+    /// Don't update state here
   }
 
   return (
