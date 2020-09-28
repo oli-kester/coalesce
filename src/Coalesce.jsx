@@ -15,12 +15,12 @@ const UPDATE_INTERVAL = 4.17; // this is 240Hz in ms.
 export const ColourSchemeContext = createContext(COLOUR_SCHEME);
 
 function Coalesce() {
-  const [clock, setClock] = useState(Date.now());
+  const [clock, setClock] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setClock(Date.now());
-    }, [UPDATE_INTERVAL]);
+      setClock(clock + 1);
+    }, UPDATE_INTERVAL);
 
     return () => {
       clearInterval(timer);

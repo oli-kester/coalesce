@@ -10,8 +10,8 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
     SHRINKING: 1,
     GROWING: 2,
   };
-  const BREATHING_ANIMATION_MAGNITUTE = 0.9;
-  const BREATHING_ANIMATION_SPEED = 50;
+  const BREATHING_ANIMATION_MAGNITUTE = 0.15;
+  const BREATHING_ANIMATION_SPEED = 4;
 
   const ColourScheme = useContext(ColourSchemeContext);
 
@@ -91,16 +91,19 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
     // breathing effect
     if (clock % BREATHING_ANIMATION_SPEED === 0) {
       const newAnimationState = animationState;
+
       if (animationState.status === ANIMATION_STATES.GROWING) {
-        newAnimationState.radius = animationState.radius + 1;
-      } else {
-        newAnimationState.radius = animationState.radius - 1;
+        newAnimationState.radius = animationState.radius + 0.1;
+      } else if (animationState.status === ANIMATION_STATES.SHRINKING) {
+        newAnimationState.radius = animationState.radius - 0.1;
       }
+
       if (animationState.radius / baseRadius > 1 + BREATHING_ANIMATION_MAGNITUTE) {
         newAnimationState.status = ANIMATION_STATES.SHRINKING;
-      } else if (animationState.radius / baseRadius > 1 - BREATHING_ANIMATION_MAGNITUTE) {
+      } else if (animationState.radius / baseRadius < 1 - BREATHING_ANIMATION_MAGNITUTE) {
         newAnimationState.status = ANIMATION_STATES.GROWING;
       }
+
       setAnimationState(newAnimationState);
     }
   }, [clock]);
