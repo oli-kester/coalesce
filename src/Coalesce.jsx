@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import GameCanvas from './GameCanvas';
+import GameCanvas from './gameCanvas';
 import './styles/main.css';
 
 const COLOUR_SCHEME = {
@@ -20,12 +20,12 @@ function Coalesce() {
   useEffect(() => {
     const timer = setInterval(() => {
       setClock(Date.now());
-    }, UPDATE_INTERVAL);
+    }, [UPDATE_INTERVAL]);
 
-    return (() => {
+    return () => {
       clearInterval(timer);
-    });
-  }, [clock]);
+    };
+  });
 
   return (
     <ColourSchemeContext.Provider value={COLOUR_SCHEME}>

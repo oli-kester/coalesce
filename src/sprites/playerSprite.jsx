@@ -1,4 +1,6 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, {
+  useContext, useRef, useState, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import { ColourSchemeContext } from '../Coalesce';
 
@@ -7,16 +9,8 @@ const SPEED_FACTOR = 1;
 
 // TODO breathing effects on player sprite
 
-// TODO switch to internal, synced clock.
-
 function PlayerSprite({ xPosStart, yPosStart, clock }) {
   const ColourScheme = useContext(ColourSchemeContext);
-
-  const prevClockRef = useRef();
-  useEffect(() => {
-    prevClockRef.current = clock;
-  });
-  const prevClock = prevClockRef.current;
 
   const [xPos, setXPos] = useState(xPosStart);
   const [yPos, setYPos] = useState(yPosStart);
@@ -75,11 +69,20 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
   }
 
   // move sprite
-  // TODO figure out a way to stop this immediately re-executing
-  if (movementStatus.UP && clock !== prevClock) {
-    console.log(`Setting yPos to ${yPos - 1}`);
-    setYPos(yPos - 1);
-  }
+  useEffect(() => {
+    if (movementStatus.UP) {
+      setYPos(yPos - 1);
+    }
+    if (movementStatus.DOWN) {
+      setYPos(yPos + 1);
+    }
+    if (movementStatus.LEFT) {
+      setXPos(xPos - 1);
+    }
+    if (movementStatus.RIGHT) {
+      setXPos(xPos + 1);
+    }
+  }, [clock]);
 
   return (
     <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0}>
