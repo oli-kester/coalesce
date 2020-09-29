@@ -4,6 +4,31 @@ import React, {
 import PropTypes from 'prop-types';
 import { ColourSchemeContext } from '../Coalesce';
 
+function elementBounds(xPos, yPos, width, height) {
+  return {
+    xPos, yPos, width, height,
+  };
+}
+
+/**
+ * Used to check if a proposed sprite position will be valid inside of a container.
+ * All dimensions are assumed rectangular.
+ * Positions are calculated from top-left
+ * @param {*} container - The dimensions / position of the container
+ * @param {*} object - The dimensions / position of the object
+ * @returns boolean - Whether or not the object's position is valid
+ */
+function boundsCheck(container, object) {
+  if (object.xPos < container.xPos) { return false; }
+  if (object.yPos < container.yPos) { return false; }
+  if (object.xPos + object.width > container.xPos + container.width) { return false; }
+  if (object.yPos + object.height > container.yPos + container.height) { return false; }
+}
+
+/**
+ * User-controllable sprite
+ * @param {*} props - Inputs are starting x and y position, and a clock signal.
+ */
 function PlayerSprite({ xPosStart, yPosStart, clock }) {
   const PLAYER_SPRITE_STARTING_RADIUS = 12;
   const ANIMATION_STATES = {
@@ -74,7 +99,6 @@ function PlayerSprite({ xPosStart, yPosStart, clock }) {
   // clock-triggered block
   useEffect(() => {
     // move sprite
-    // TODO implement bounds
     if (movementStatus.UP) {
       setYPos(yPos - 1);
     }
