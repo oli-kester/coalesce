@@ -2,5 +2,6 @@
     "editor.tabSize": 2,
     "todo-tree.filtering.excludeGlobs": [
         "node_modules"
-    ]
+    ],
+    "compile-hero.disable-compile-files-on-did-save-code": false
 }
