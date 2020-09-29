@@ -19,5 +19,6 @@ module.exports = {
   ],
   rules: {
     // "import/no-named-as-default": 0
+    "import/no-cycle": 0,
   },
 };

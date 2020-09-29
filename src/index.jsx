@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
-import Coalesce from './Coalesce';
+import Coalesce from './coalesce';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

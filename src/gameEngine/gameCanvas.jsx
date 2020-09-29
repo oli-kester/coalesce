@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PlayerSprite from './sprites/playerSprite';
+import PlayerSprite from '../sprites/playerSprite';
 
 function GameCanvas({ clock }) {
   return (

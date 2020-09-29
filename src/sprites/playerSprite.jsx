@@ -1,8 +1,8 @@
 import React, {
-  useContext, useRef, useState, useEffect,
+  useContext, useState, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
-import { ColourSchemeContext } from '../Coalesce';
+import { ColourSchemeContext } from '../coalesce';
 
 function elementBounds(xPos, yPos, width, height) {
   return {
@@ -23,6 +23,7 @@ function boundsCheck(container, object) {
   if (object.yPos < container.yPos) { return false; }
   if (object.xPos + object.width > container.xPos + container.width) { return false; }
   if (object.yPos + object.height > container.yPos + container.height) { return false; }
+  return true;
 }
 
 /**

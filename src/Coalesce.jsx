@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import GameCanvas from './gameCanvas';
+import GameCanvas from './gameEngine/gameCanvas';
 import './styles/main.css';
 
 const COLOUR_SCHEME = {
