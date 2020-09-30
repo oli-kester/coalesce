@@ -1,33 +1,11 @@
-/**
- * Creates a new box-shaped object. If height is omitted, a cube is created.
- * @param {number} xPos X position on screen (anchored to top-left corner)
- * @param {number} yPos Y position on screen (anchored to top-left corner)
- * @param {number} width Width of element
- * @param {number} height Height of element
- */
-function objectBoxCreator(xPos, yPos, width, height = width) {
-  const thisBox = {
-    xPos, yPos, width, height,
-  };
-  return {
-    ...thisBox,
-    boxBoundsCheck: (childObject) => {
-      if (childObject.xPos < thisBox.xPos) { return false; }
-      if (childObject.yPos < thisBox.yPos) { return false; }
-      if (childObject.xPos + childObject.width > thisBox.xPos + thisBox.width) { return false; }
-      if (childObject.yPos + childObject.height > thisBox.yPos + thisBox.height) { return false; }
-      return true;
-    },
-    getRadius: () => thisBox.width / 2,
-  };
-}
+import PropTypes from 'prop-types';
 
 /**
- * Creates a new box-shaped object. If height is omitted, a cube is created.
+ * Creates a new box-shaped object. If height is omitted, a square is created.
  * @param {number} xPos - X position on screen (anchored to top-left corner)
  * @param {number} yPos - Y position on screen (anchored to top-left corner)
  * @param {number} width - Width of element
- * @param {number} height - Height of element. Create a cube by omitting this.
+ * @param {number} height - Height of element. Create a square by omitting this.
  */
 function RectObject(xPos, yPos, width, height = width) {
   const thisRect = {
@@ -39,11 +17,30 @@ function RectObject(xPos, yPos, width, height = width) {
      * This function checks if the given coordinates are valid for a child
      *  rectangle inside this one. Returns boolean.
      */
-    boundsCheck: (childObject) => {
+    childRectBoundsCheck: (childObject) => {
       if (childObject.xPos < thisRect.xPos) { return false; }
       if (childObject.yPos < thisRect.yPos) { return false; }
       if (childObject.xPos + childObject.width > thisRect.xPos + thisRect.width) { return false; }
       if (childObject.yPos + childObject.height > thisRect.yPos + thisRect.height) { return false; }
+      return true;
+    },
+    /**
+    * This function checks if the given coordinates are valid for a child
+    *  circle inside this rectangle. Returns boolean.
+    */
+    childCircleBoundsCheck: (childObject) => {
+      if (childObject.xPos - childObject.radius < thisRect.xPos) {
+        return false;
+      }
+      if (childObject.yPos - childObject.radius < thisRect.yPos) {
+        return false;
+      }
+      if (childObject.xPos + childObject.radius > thisRect.xPos + thisRect.width) {
+        return false;
+      }
+      if (childObject.yPos + childObject.radius > thisRect.yPos + thisRect.height) {
+        return false;
+      }
       return true;
     },
   };
@@ -55,7 +52,7 @@ function RectObject(xPos, yPos, width, height = width) {
  * @param {number} yPos - Y position on screen (anchored to center)
  * @param {number} radius - Radius of element
  */
-function CircleObject(xPos, yPos, radius) {
+export function CircleObject(xPos, yPos, radius) {
   const thisCircle = {
     xPos, yPos, radius,
   };
@@ -65,9 +62,9 @@ function CircleObject(xPos, yPos, radius) {
      * Checks if the coordinates given for another circle will result
      * in a collision with this one. Returns boolean.
      */
-    collisionCheck: (otherCircle) => {
-      // TODO implement this
-      return false;
-    },
+    // TODO implement this
+    collisionCheck: (otherCircle) => false,
   };
 }
+
+export default RectObject;

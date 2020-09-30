@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { ColourSchemeContext } from '../coalesce';
-import objectBoxCreator from '../gameEngine/engine';
+import { CircleObject } from '../gameEngine/engine';
 
 /**
  * User-controllable sprite
@@ -12,7 +12,7 @@ import objectBoxCreator from '../gameEngine/engine';
 function PlayerSprite({
   xPosStart, yPosStart, clock, parentDims,
 }) {
-  const PLAYER_SPRITE_STARTING_WIDTH = 24;
+  const PLAYER_SPRITE_STARTING_RADIUS = 12;
   const ANIMATION_STATES = {
     SHRINKING: 1,
     GROWING: 2,
@@ -22,15 +22,11 @@ function PlayerSprite({
 
   const ColourScheme = useContext(ColourSchemeContext);
 
-  const [playerBox, setPlayerBox] = useState(
-    objectBoxCreator(
-      xPosStart - (PLAYER_SPRITE_STARTING_WIDTH / 2),
-      yPosStart - (PLAYER_SPRITE_STARTING_WIDTH / 2),
-      PLAYER_SPRITE_STARTING_WIDTH,
-    ),
+  const [playerBounds, setPlayerBounds] = useState(
+    CircleObject(xPosStart, yPosStart, PLAYER_SPRITE_STARTING_RADIUS),
   );
   const [animationState, setAnimationState] = useState({
-    radius: PLAYER_SPRITE_STARTING_WIDTH / 2,
+    radius: PLAYER_SPRITE_STARTING_RADIUS,
     status: ANIMATION_STATES.SHRINKING,
   });
   const [movementStatus, setMovementStatus] = useState({
@@ -85,26 +81,26 @@ function PlayerSprite({
   // clock-triggered block
   useEffect(() => {
     // move sprite
-    const newPlayerBox = { ...playerBox };
+    const newPlayerBounds = { ...playerBounds };
     let changed = false;
     if (movementStatus.UP) {
-      newPlayerBox.yPos = playerBox.yPos - 1;
+      newPlayerBounds.yPos = playerBounds.yPos - 1;
       changed = true;
     }
     if (movementStatus.DOWN) {
-      newPlayerBox.yPos = playerBox.yPos + 1;
+      newPlayerBounds.yPos = playerBounds.yPos + 1;
       changed = true;
     }
     if (movementStatus.LEFT) {
-      newPlayerBox.xPos = playerBox.xPos - 1;
+      newPlayerBounds.xPos = playerBounds.xPos - 1;
       changed = true;
     }
     if (movementStatus.RIGHT) {
-      newPlayerBox.xPos = playerBox.xPos + 1;
+      newPlayerBounds.xPos = playerBounds.xPos + 1;
       changed = true;
     }
-    if (changed && parentDims.boxBoundsCheck(newPlayerBox)) {
-      setPlayerBox(newPlayerBox);
+    if (changed && parentDims.childCircleBoundsCheck(newPlayerBounds)) {
+      setPlayerBounds(newPlayerBounds);
     }
 
     // breathing effect
@@ -116,10 +112,10 @@ function PlayerSprite({
       } else if (animationState.status === ANIMATION_STATES.SHRINKING) {
         newAnimationState.radius = animationState.radius - 0.1;
       }
-      if (animationState.radius / playerBox.getRadius() > 1 + BREATHING_ANIMATION_MAGNITUDE) {
+      if (animationState.radius / playerBounds.radius > 1 + BREATHING_ANIMATION_MAGNITUDE) {
         newAnimationState.status = ANIMATION_STATES.SHRINKING;
       } else
-        if (animationState.radius / playerBox.getRadius() < 1 - BREATHING_ANIMATION_MAGNITUDE) {
+        if (animationState.radius / playerBounds.radius < 1 - BREATHING_ANIMATION_MAGNITUDE) {
           newAnimationState.status = ANIMATION_STATES.GROWING;
         }
 
@@ -130,8 +126,8 @@ function PlayerSprite({
   return (
     <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0}>
       <circle
-        cx={playerBox.xPos + playerBox.getRadius()}
-        cy={playerBox.yPos + playerBox.getRadius()}
+        cx={playerBounds.xPos}
+        cy={playerBounds.yPos}
         r={animationState.radius}
         fill={ColourScheme.White}
       />
@@ -149,7 +145,7 @@ PlayerSprite.propTypes = {
     yPos: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    boxBoundsCheck: PropTypes.func.isRequired,
+    childCircleBoundsCheck: PropTypes.func.isRequired,
   }).isRequired,
 };
 
