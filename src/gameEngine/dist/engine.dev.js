@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CircleObject = CircleObject;
+exports.SpawnRing = SpawnRing;
 exports["default"] = void 0;
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -103,6 +104,32 @@ function CircleObject(xPos, yPos, radius) {
     // TODO implement this
     collisionCheck: function collisionCheck(otherCircle) {
       return false;
+    }
+  });
+}
+/**
+ * An invisible ring that returns random points around its curcumference
+ * for sprites to spawn along.
+ * @param {*} xPos - X position on screen (anchored to center)
+ * @param {*} yPos - Y position on screen (anchored to center)
+ * @param {*} radius - Radius of ring
+ */
+
+
+function SpawnRing(xPos, yPos, radius) {
+  var circle = CircleObject(xPos, yPos, radius);
+  return _objectSpread({}, circle, {
+    /**
+     * Returns a random coordinate along the circle's circumference
+     */
+    getRandomSpawnLocation: function getRandomSpawnLocation() {
+      var randomSeed = Math.random() * 2 * Math.PI;
+      var xSpawn = xPos + radius * Math.cos(randomSeed);
+      var ySpawn = yPos + radius * Math.sin(randomSeed);
+      return {
+        xSpawn: xSpawn,
+        ySpawn: ySpawn
+      };
     }
   });
 }

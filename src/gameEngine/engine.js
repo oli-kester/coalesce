@@ -67,4 +67,28 @@ export function CircleObject(xPos, yPos, radius) {
   };
 }
 
+/**
+ * An invisible ring that returns random points around its curcumference
+ * for sprites to spawn along.
+ * @param {*} xPos - X position on screen (anchored to center)
+ * @param {*} yPos - Y position on screen (anchored to center)
+ * @param {*} radius - Radius of ring
+ */
+export function SpawnRing(xPos, yPos, radius) {
+  const circle = CircleObject(xPos, yPos, radius);
+
+  return {
+    ...circle,
+    /**
+     * Returns a random coordinate along the circle's circumference
+     */
+    getRandomSpawnLocation: () => {
+      const randomSeed = Math.random() * 2 * Math.PI;
+      const xSpawn = xPos + radius * Math.cos(randomSeed);
+      const ySpawn = yPos + radius * Math.sin(randomSeed);
+      return { xSpawn, ySpawn };
+    },
+  };
+}
+
 export default RectObject;
