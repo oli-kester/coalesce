@@ -103,7 +103,7 @@ function PlayerSprite({
       newPlayerBox.xPos = playerBox.xPos + 1;
       changed = true;
     }
-    if (changed && parentDims.boundsCheck(newPlayerBox)) {
+    if (changed && parentDims.boxBoundsCheck(newPlayerBox)) {
       setPlayerBox(newPlayerBox);
     }
 
@@ -149,7 +149,7 @@ PlayerSprite.propTypes = {
     yPos: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    boundsCheck: PropTypes.func.isRequired,
+    boxBoundsCheck: PropTypes.func.isRequired,
   }).isRequired,
 };
 
