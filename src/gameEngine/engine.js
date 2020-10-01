@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 /**
  * Creates a new box-shaped object. If height is omitted, a square is created.
  * @param {number} xPos - X position on screen (anchored to top-left corner)
