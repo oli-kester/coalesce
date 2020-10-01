@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import CircleSprite from './circleSprite';
 
@@ -18,6 +18,8 @@ function PlayerSprite({
     LEFT: false,
     RIGHT: false,
   });
+
+  const focusRef = useRef(null);
 
   function keyDown(event) {
     const currMovementStatus = { ...movementStatus };
@@ -63,6 +65,8 @@ function PlayerSprite({
 
   // clock-triggered block
   useEffect(() => {
+    // lock keyboard focus to player
+    focusRef.current.focus();
     // move sprite
     const newPlayerBounds = { ...spriteData.spriteBounds };
     let changed = false;
@@ -88,7 +92,7 @@ function PlayerSprite({
   }, [clock]);
 
   return (
-    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="sprite-window">
+    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="sprite-window" ref={focusRef}>
       <circle
         cx={spriteData.spriteBounds.xPos}
         cy={spriteData.spriteBounds.yPos}
