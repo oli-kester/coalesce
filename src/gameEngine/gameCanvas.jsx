@@ -43,6 +43,7 @@ function GameCanvas({ clock }) {
           xPosStart={spriteParams.xSpawn}
           yPosStart={spriteParams.ySpawn}
           clock={clock}
+          canvasSize={CANVAS_SIZE}
           key={spriteParams.key}
         />
       ))}
