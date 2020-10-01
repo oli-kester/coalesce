@@ -9,7 +9,8 @@ import CircleSprite from './circleSprite';
 function PlayerSprite({
   xPosStart, yPosStart, clock, parentDims,
 }) {
-  const spriteData = CircleSprite(xPosStart, yPosStart, clock);
+  const PLAYER_SPRITE_STARTING_RADIUS = 12;
+  const spriteData = CircleSprite(xPosStart, yPosStart, PLAYER_SPRITE_STARTING_RADIUS, clock);
 
   const [movementStatus, setMovementStatus] = useState({
     UP: false,

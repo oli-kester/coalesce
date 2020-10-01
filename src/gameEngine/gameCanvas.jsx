@@ -13,7 +13,7 @@ function GameCanvas({ clock }) {
     MARGIN_SIZE, MARGIN_SIZE, CANVAS_SIZE - MARGIN_SIZE * 2, CANVAS_SIZE - MARGIN_SIZE * 2,
   ));
   const [spawnRing] = useState(SpawnRing(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 4));
-  const [foodSprites] = useState([]);
+  const [foodSpriteParams] = useState([]);
 
   const canvasStyle = { width: CANVAS_SIZE, height: CANVAS_SIZE };
 
@@ -21,13 +21,11 @@ function GameCanvas({ clock }) {
   useEffect(() => {
     if (clock % SPAWN_INTERVAL === 0) {
       const coordinates = spawnRing.getRandomSpawnLocation();
-      foodSprites.push(
-        <FoodSprite
-          xPosStart={coordinates.xSpawn}
-          yPosStart={coordinates.ySpawn}
-          clock={clock}
-        />,
-      );
+      foodSpriteParams.push({
+        xSpawn: coordinates.xSpawn,
+        ySpawn: coordinates.ySpawn,
+        key: clock,
+      });
     }
   });
 
@@ -38,8 +36,16 @@ function GameCanvas({ clock }) {
         yPosStart={CANVAS_SIZE / 2}
         clock={clock}
         parentDims={canvasBox}
+        key={1}
       />
-      {foodSprites[0]}
+      {foodSpriteParams.map((spriteParams) => (
+        <FoodSprite
+          xPosStart={spriteParams.xSpawn}
+          yPosStart={spriteParams.ySpawn}
+          clock={clock}
+          key={spriteParams.key}
+        />
+      ))}
     </div>
   );
 }

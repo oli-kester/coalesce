@@ -8,12 +8,12 @@ import { CircleObject } from '../gameEngine/engine';
  * Interface for creating new circular sprites. Does not draw on screen - data only.
  * @param {number} xPosStart - X position on screen (anchored to center)
  * @param {number} yPosStart - Y position on screen (anchored to center)
+ * @param {number} radius - Radius of circle
  * @param {number} clock - Clock signal
  * @returns {object} Returns an object containing spriteBounds,
  * setSpriteBounds, animationState & ColourScheme.
  */
-function CircleSprite(xPosStart, yPosStart, clock) {
-  const SPRITE_STARTING_RADIUS = 12;
+function CircleSprite(xPosStart, yPosStart, radius, clock) {
   const ANIMATION_STATES = {
     SHRINKING: 1,
     GROWING: 2,
@@ -24,10 +24,10 @@ function CircleSprite(xPosStart, yPosStart, clock) {
   const ColourScheme = useContext(ColourSchemeContext);
 
   const [spriteBounds, setSpriteBounds] = useState(
-    CircleObject(xPosStart, yPosStart, SPRITE_STARTING_RADIUS),
+    CircleObject(xPosStart, yPosStart, radius),
   );
   const [animationState, setAnimationState] = useState({
-    radius: SPRITE_STARTING_RADIUS,
+    radius,
     status: ANIMATION_STATES.SHRINKING,
   });
 
