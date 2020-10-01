@@ -10,7 +10,7 @@ function GameCanvas({ clock }) {
   const SPAWN_INTERVAL = 500; // interval between spawns
 
   const [canvasBox] = useState(RectObject(
-    MARGIN_SIZE, MARGIN_SIZE, CANVAS_SIZE - MARGIN_SIZE, CANVAS_SIZE - MARGIN_SIZE,
+    MARGIN_SIZE, MARGIN_SIZE, CANVAS_SIZE - MARGIN_SIZE * 2, CANVAS_SIZE - MARGIN_SIZE * 2,
   ));
   const [spawnRing] = useState(SpawnRing(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 4));
   const [foodSprites] = useState([]);
