@@ -5,7 +5,12 @@ import { ColourSchemeContext } from '../coalesce';
 import { CircleObject } from '../gameEngine/engine';
 
 /**
- * General-purpose circle sprite interface.
+ * Interface for creating new circular sprites. Does not draw on screen - data only.
+ * @param {number} xPosStart - X position on screen (anchored to center)
+ * @param {number} yPosStart - Y position on screen (anchored to center)
+ * @param {number} clock - Clock signal
+ * @returns {object} Returns an object containing spriteBounds,
+ * setSpriteBounds, animationState & ColourScheme.
  */
 function CircleSprite(xPosStart, yPosStart, clock) {
   const SPRITE_STARTING_RADIUS = 12;

@@ -32,6 +32,8 @@ function Coalesce() {
       <h1>Coalesce</h1>
       <h2>Pure Reactive Joy.</h2>
       <GameCanvas clock={clock} />
+      <h3>Clock counter</h3>
+      <h3>{clock}</h3>
     </ColourSchemeContext.Provider>
   );
 }

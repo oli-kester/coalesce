@@ -87,7 +87,7 @@ function PlayerSprite({
   }, [clock]);
 
   return (
-    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0}>
+    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="sprite-window">
       <circle
         cx={spriteData.spriteBounds.xPos}
         cy={spriteData.spriteBounds.yPos}

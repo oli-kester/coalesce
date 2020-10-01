@@ -1,35 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PlayerSprite from '../sprites/playerSprite';
-import RectObject from './engine';
+import FoodSprite from '../sprites/foodSprite';
+import RectObject, { SpawnRing } from './engine';
 
 function GameCanvas({ clock }) {
   const CANVAS_SIZE = 500;
   const MARGIN_SIZE = 5;
-  const SPAWN_INTERVAL = 2000; // interval between spawns
+  const SPAWN_INTERVAL = 500; // interval between spawns
 
   const [canvasBox] = useState(RectObject(
     MARGIN_SIZE, MARGIN_SIZE, CANVAS_SIZE - MARGIN_SIZE, CANVAS_SIZE - MARGIN_SIZE,
   ));
-  const [foodSprites, setFoodSprites] = useState([]);
+  const [spawnRing] = useState(SpawnRing(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 4));
+  const [foodSprites] = useState([]);
+
+  const canvasStyle = { width: CANVAS_SIZE, height: CANVAS_SIZE };
 
   // clock-triggered block
   useEffect(() => {
     if (clock % SPAWN_INTERVAL === 0) {
-      foodSprites.push('');
+      const coordinates = spawnRing.getRandomSpawnLocation();
+      foodSprites.push(
+        <FoodSprite
+          xPosStart={coordinates.xSpawn}
+          yPosStart={coordinates.ySpawn}
+          clock={clock}
+        />,
+      );
     }
   });
 
   return (
-    <div className="canvas">
+    <div className="canvas" style={canvasStyle}>
       <PlayerSprite
         xPosStart={CANVAS_SIZE / 2}
         yPosStart={CANVAS_SIZE / 2}
         clock={clock}
         parentDims={canvasBox}
       />
-      <h3>Clock counter</h3>
-      <h3>{clock}</h3>
+      {foodSprites[0]}
     </div>
   );
 }
