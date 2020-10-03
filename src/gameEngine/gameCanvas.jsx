@@ -1,11 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  createContext, useEffect, useState, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import PlayerSprite from '../sprites/playerSprite';
-import FoodSprite from '../sprites/foodSprite';
+import NpcSprite from '../sprites/npcSprite';
 import RectObject, { SpawnRing, collisionCheck } from './engine';
 import CircleSprite, { breathe } from '../sprites/circleSprite';
 
 // TODO make fully resizable
+
+const SPRITE_TYPES = { FOOD: 1, ENEMY: 2 };
+export const SpriteTypesContext = createContext(SPRITE_TYPES);
 
 function GameCanvas({ clock }) {
   const CANVAS_SIZE = 500;
@@ -29,7 +34,8 @@ function GameCanvas({ clock }) {
     RIGHT: false,
   });
 
-  const SPAWN_INTERVAL = 500; // interval between spawns
+  // TODO reduce this over time
+  const SPAWN_INTERVAL = 500;
   const [spawnRing] = useState(SpawnRing(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 1.5));
   const [spriteDeleteBox] = useState(RectObject(-400, -400, CANVAS_SIZE + 800, CANVAS_SIZE + 800));
   const FOOD_SPRITE_STARTING_RADIUS = 9;
@@ -88,19 +94,25 @@ function GameCanvas({ clock }) {
     // spawn new sprites
     if (clock % SPAWN_INTERVAL === 0) {
       const coordinates = spawnRing.getRandomSpawnLocation();
+      // TODO spawn more enemies later on
+      const spriteType = Math.round(Math.random() + 1);
       foodSprites.push(
         {
+          // TODO randomise new sprite size slightly
           ...CircleSprite(coordinates.xSpawn, coordinates.ySpawn, FOOD_SPRITE_STARTING_RADIUS),
+          // TODO randomise movement angle slightly
           spriteMovementVector: {
             x: -((coordinates.xSpawn - CANVAS_SIZE / 2) * (FOOD_SPRITE_MOVEMENT_SPEED)),
             y: -((coordinates.ySpawn - CANVAS_SIZE / 2) * (FOOD_SPRITE_MOVEMENT_SPEED)),
           },
+          type: spriteType,
           key: clock,
         },
       );
     }
 
     // move player sprite
+    // TODO increase movement speed over time
     const newPlayerBounds = { ...playerSpriteData.bounds };
     let changed = false;
     if (playerMovementStatus.UP) {
@@ -154,7 +166,12 @@ function GameCanvas({ clock }) {
         // TODO - make this work based on animation size
       } else if (collisionCheck(playerSpriteData.bounds, currSprite.bounds)) {
         const newPlayerSpriteData = { ...playerSpriteData };
-        newPlayerSpriteData.bounds.radius += PLAYER_SPRITE_GROWTH_RATE;
+        if (currSprite.type === SPRITE_TYPES.FOOD) {
+          newPlayerSpriteData.bounds.radius += PLAYER_SPRITE_GROWTH_RATE;
+        } else {
+          // TODO game over when sprite size is zero
+          newPlayerSpriteData.bounds.radius -= PLAYER_SPRITE_GROWTH_RATE;
+        }
         newPlayerSpriteData.animationState.radius = newPlayerSpriteData.bounds.radius - 1;
         setPlayerSpriteData(newPlayerSpriteData);
         foodSprites.splice(i, 1);
@@ -171,14 +188,17 @@ function GameCanvas({ clock }) {
         radius={playerSpriteData.animationState.radius}
         key={1}
       />
-      {foodSprites.map((spriteParams) => (
-        <FoodSprite
-          xPos={spriteParams.bounds.xPos}
-          yPos={spriteParams.bounds.yPos}
-          radius={spriteParams.animationState.radius}
-          key={spriteParams.key}
-        />
-      ))}
+      <SpriteTypesContext.Provider value={SPRITE_TYPES}>
+        {foodSprites.map((spriteParams) => (
+          <NpcSprite
+            xPos={spriteParams.bounds.xPos}
+            yPos={spriteParams.bounds.yPos}
+            radius={spriteParams.animationState.radius}
+            type={spriteParams.type}
+            key={spriteParams.key}
+          />
+        ))}
+      </SpriteTypesContext.Provider>
     </svg>
   );
 }

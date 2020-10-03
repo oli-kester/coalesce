@@ -12,6 +12,7 @@ function PlayerSprite({
   const ColourScheme = useContext(ColourSchemeContext);
 
   return (
+    // TODO make multiple circles over time
     <circle
       cx={xPos}
       cy={yPos}
