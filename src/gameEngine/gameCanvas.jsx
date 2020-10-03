@@ -20,12 +20,12 @@ function GameCanvas({ clock }) {
   const PLAYER_SPRITE_STARTING_RADIUS = 12;
   const [playerSpriteData, setPlayerSpriteData] = useState({
     ...CircleSprite(CANVAS_SIZE / 2, CANVAS_SIZE / 2, PLAYER_SPRITE_STARTING_RADIUS),
-    movementStatus: {
-      UP: false,
-      DOWN: false,
-      LEFT: false,
-      RIGHT: false,
-    },
+  });
+  const [playerMovementStatus, setPlayerMovementStatus] = useState({
+    UP: false,
+    DOWN: false,
+    LEFT: false,
+    RIGHT: false,
   });
 
   const SPAWN_INTERVAL = 500; // interval between spawns
@@ -37,45 +37,45 @@ function GameCanvas({ clock }) {
   const focusRef = useRef(null);
 
   function keyDown(event) {
-    const newPlayerData = { ...playerSpriteData };
+    const newMovementStatus = { ...playerMovementStatus };
     switch (event.key) {
       case 'ArrowUp':
-        newPlayerData.movementStatus.UP = true;
+        newMovementStatus.UP = true;
         break;
       case 'ArrowDown':
-        newPlayerData.movementStatus.DOWN = true;
+        newMovementStatus.DOWN = true;
         break;
       case 'ArrowLeft':
-        newPlayerData.movementStatus.LEFT = true;
+        newMovementStatus.LEFT = true;
         break;
       case 'ArrowRight':
-        newPlayerData.movementStatus.RIGHT = true;
+        newMovementStatus.RIGHT = true;
         break;
       default:
         break;
     }
-    setPlayerSpriteData(newPlayerData);
+    setPlayerMovementStatus(newMovementStatus);
   }
 
   function keyUp(event) {
-    const newPlayerData = { ...playerSpriteData };
+    const newMovementStatus = { ...playerMovementStatus };
     switch (event.key) {
       case 'ArrowUp':
-        newPlayerData.movementStatus.UP = false;
+        newMovementStatus.UP = false;
         break;
       case 'ArrowDown':
-        newPlayerData.movementStatus.DOWN = false;
+        newMovementStatus.DOWN = false;
         break;
       case 'ArrowLeft':
-        newPlayerData.movementStatus.LEFT = false;
+        newMovementStatus.LEFT = false;
         break;
       case 'ArrowRight':
-        newPlayerData.movementStatus.RIGHT = false;
+        newMovementStatus.RIGHT = false;
         break;
       default:
         break;
     }
-    setPlayerSpriteData(newPlayerData);
+    setPlayerMovementStatus(newMovementStatus);
   }
 
   // clock-triggered block
@@ -99,25 +99,27 @@ function GameCanvas({ clock }) {
     }
 
     // move player sprite
-    const newPlayerData = { ...playerSpriteData };
+    const newPlayerBounds = { ...playerSpriteData.bounds };
     let changed = false;
-    if (newPlayerData.movementStatus.UP) {
-      newPlayerData.bounds.yPos -= 1;
+    if (playerMovementStatus.UP) {
+      newPlayerBounds.yPos -= 1;
       changed = true;
     }
-    if (newPlayerData.movementStatus.DOWN) {
-      newPlayerData.bounds.yPos += 1;
+    if (playerMovementStatus.DOWN) {
+      newPlayerBounds.yPos += 1;
       changed = true;
     }
-    if (newPlayerData.movementStatus.LEFT) {
-      newPlayerData.bounds.xPos -= 1;
+    if (playerMovementStatus.LEFT) {
+      newPlayerBounds.xPos -= 1;
       changed = true;
     }
-    if (newPlayerData.movementStatus.RIGHT) {
-      newPlayerData.bounds.xPos += 1;
+    if (playerMovementStatus.RIGHT) {
+      newPlayerBounds.xPos += 1;
       changed = true;
     }
-    if (changed && canvasBox.childCircleBoundsCheck(newPlayerData.bounds)) {
+    if (changed && canvasBox.childCircleBoundsCheck(newPlayerBounds)) {
+      const newPlayerData = { ...playerSpriteData };
+      newPlayerData.bounds = newPlayerBounds;
       setPlayerSpriteData(newPlayerData);
     }
 
