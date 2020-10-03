@@ -61,7 +61,9 @@ export function CircleObject(xPos, yPos, radius) {
      * in a collision with this one. Returns boolean.
      */
     // TODO implement this
-    collisionCheck: (otherCircle) => false,
+    collisionCheck: (otherCircle) => {
+      
+    },
   };
 }
 

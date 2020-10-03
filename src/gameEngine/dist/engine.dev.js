@@ -98,9 +98,7 @@ function CircleObject(xPos, yPos, radius) {
      * in a collision with this one. Returns boolean.
      */
     // TODO implement this
-    collisionCheck: function collisionCheck(otherCircle) {
-      return false;
-    }
+    collisionCheck: function collisionCheck(otherCircle) {}
   });
 }
 /**
