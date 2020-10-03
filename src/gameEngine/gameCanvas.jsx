@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import PlayerSprite from '../sprites/playerSprite';
 import FoodSprite from '../sprites/foodSprite';
 import RectObject, { SpawnRing, collisionCheck } from './engine';
-import CircleSprite from '../sprites/circleSprite';
+import CircleSprite, { breathe } from '../sprites/circleSprite';
 
 // TODO make fully resizable
 
@@ -127,18 +127,18 @@ function GameCanvas({ clock }) {
 
     // breathing effect
     if (clock % BREATHING_ANIMATION_SPEED === 0) {
-      playerSpriteData.breathe();
+      setPlayerSpriteData(breathe(playerSpriteData));
     }
 
     // move other sprites
     for (let i = 0; i < foodSprites.length; i += 1) {
-      const currSprite = foodSprites[i];
+      let currSprite = foodSprites[i];
       currSprite.bounds.xPos += currSprite.spriteMovementVector.x;
       currSprite.bounds.yPos += currSprite.spriteMovementVector.y;
 
       // breathing effect
       if (clock % BREATHING_ANIMATION_SPEED === 0) {
-        currSprite.breathe();
+        currSprite = breathe(currSprite);
       }
     }
 

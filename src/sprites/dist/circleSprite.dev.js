@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.breathe = breathe;
 exports["default"] = void 0;
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -14,12 +15,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var _require = require('../gameEngine/engine'),
     CircleObject = _require.CircleObject;
 
+var ANIMATION_STATES = {
+  SHRINKING: 1,
+  GROWING: 2
+};
+var BREATHING_ANIMATION_MAGNITUDE = 0.15;
+
 function CircleSprite(xPos, yPos, radius) {
-  var ANIMATION_STATES = {
-    SHRINKING: 1,
-    GROWING: 2
-  };
-  var BREATHING_ANIMATION_MAGNITUDE = 0.15;
   var thisCircleSprite = {
     bounds: CircleObject(xPos, yPos, radius),
     animationState: {
@@ -27,24 +29,29 @@ function CircleSprite(xPos, yPos, radius) {
       status: ANIMATION_STATES.SHRINKING
     }
   };
-  return _objectSpread({}, thisCircleSprite, {
-    breathe: function breathe() {
-      var bounds = thisCircleSprite.bounds,
-          animationState = thisCircleSprite.animationState;
+  return _objectSpread({}, thisCircleSprite);
+}
 
-      if (animationState.status === ANIMATION_STATES.GROWING) {
-        animationState.radius += 0.1;
-      } else if (animationState.status === ANIMATION_STATES.SHRINKING) {
-        animationState.radius -= 0.1;
-      }
+function breathe(circleSprite) {
+  var newSpriteState = _objectSpread({}, circleSprite);
 
-      if (animationState.radius / bounds.radius > 1 + BREATHING_ANIMATION_MAGNITUDE) {
-        animationState.status = ANIMATION_STATES.SHRINKING;
-      } else if (animationState.radius / bounds.radius < 1 - BREATHING_ANIMATION_MAGNITUDE) {
-        animationState.status = ANIMATION_STATES.GROWING;
-      }
-    }
-  });
+  var _circleSprite = _objectSpread({}, circleSprite),
+      bounds = _circleSprite.bounds,
+      animationState = _circleSprite.animationState;
+
+  if (animationState.status === ANIMATION_STATES.GROWING) {
+    animationState.radius += 0.1;
+  } else if (animationState.status === ANIMATION_STATES.SHRINKING) {
+    animationState.radius -= 0.1;
+  }
+
+  if (animationState.radius / bounds.radius > 1 + BREATHING_ANIMATION_MAGNITUDE) {
+    animationState.status = ANIMATION_STATES.SHRINKING;
+  } else if (animationState.radius / bounds.radius < 1 - BREATHING_ANIMATION_MAGNITUDE) {
+    animationState.status = ANIMATION_STATES.GROWING;
+  }
+
+  return newSpriteState;
 }
 
 var _default = CircleSprite;
