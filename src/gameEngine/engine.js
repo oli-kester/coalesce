@@ -56,13 +56,24 @@ export function CircleObject(xPos, yPos, radius) {
   };
   return {
     ...thisCircle,
-    /**
-     * Checks if the coordinates given for another circle will result
-     * in a collision with this one. Returns boolean.
-     */
-    // TODO implement this
-    collisionCheck: (otherCircle) => false,
   };
+}
+
+/**
+ * Checks if the coordinates given for another circle will result
+ * in a collision with this one. Returns boolean.
+ * @param {*} circle1 The first CircleObject
+ * @param {*} circle2 The second CircleObject
+ * @returns {boolean} True if a collision has occurred, false if not.
+ */
+export function collisionCheck(circle1, circle2) {
+  const xDelta = Math.abs(circle1.xPos - circle2.xPos);
+  const yDelta = Math.abs(circle1.yPos - circle2.yPos);
+  const centerDistance = Math.sqrt((xDelta ** 2) + (yDelta ** 2));
+  if (centerDistance <= circle1.radius + circle2.radius) {
+    return true;
+  }
+  return false;
 }
 
 /**

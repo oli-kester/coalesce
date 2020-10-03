@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CircleObject = CircleObject;
+exports.collisionCheck = collisionCheck;
 exports.SpawnRing = SpawnRing;
 exports["default"] = void 0;
 
@@ -92,16 +93,27 @@ function CircleObject(xPos, yPos, radius) {
     yPos: yPos,
     radius: radius
   };
-  return _objectSpread({}, thisCircle, {
-    /**
-     * Checks if the coordinates given for another circle will result
-     * in a collision with this one. Returns boolean.
-     */
-    // TODO implement this
-    collisionCheck: function collisionCheck(otherCircle) {
-      return false;
-    }
-  });
+  return _objectSpread({}, thisCircle);
+}
+/**
+ * Checks if the coordinates given for another circle will result
+ * in a collision with this one. Returns boolean.
+ * @param {*} circle1 The first CircleObject
+ * @param {*} circle2 The second CircleObject
+ * @returns {boolean} True if a collision has occurred, false if not.
+ */
+
+
+function collisionCheck(circle1, circle2) {
+  var xDelta = Math.abs(circle1.xPos - circle2.xPos);
+  var yDelta = Math.abs(circle1.yPos - circle2.yPos);
+  var centerDistance = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+
+  if (centerDistance <= circle1.radius + circle2.radius) {
+    return true;
+  }
+
+  return false;
 }
 /**
  * An invisible ring that returns random points around its curcumference
