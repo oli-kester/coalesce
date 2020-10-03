@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import PlayerSprite from '../sprites/playerSprite';
 import FoodSprite from '../sprites/foodSprite';
-import RectObject, { CircleObject, SpawnRing } from './engine';
+import RectObject, { SpawnRing } from './engine';
+import CircleSprite from '../sprites/circleSprite';
 
 // TODO make fully resizable
 
@@ -14,13 +15,11 @@ function GameCanvas({ clock }) {
   ));
   const canvasStyle = { width: CANVAS_SIZE, height: CANVAS_SIZE };
 
-  const ANIMATION_STATES = { SHRINKING: 1, GROWING: 2 };
-  const BREATHING_ANIMATION_MAGNITUDE = 0.15;
   const BREATHING_ANIMATION_SPEED = 4;
 
   const PLAYER_SPRITE_STARTING_RADIUS = 12;
   const [playerSpriteData, setPlayerSpriteData] = useState({
-    bounds: CircleObject(CANVAS_SIZE / 2, CANVAS_SIZE / 2, PLAYER_SPRITE_STARTING_RADIUS),
+    ...CircleSprite(CANVAS_SIZE / 2, CANVAS_SIZE / 2, PLAYER_SPRITE_STARTING_RADIUS),
     movementStatus: {
       UP: false,
       DOWN: false,
@@ -83,19 +82,16 @@ function GameCanvas({ clock }) {
   useEffect(() => {
     // lock keyboard focus to player
     focusRef.current.focus();
+
     // spawn new sprites
     if (clock % SPAWN_INTERVAL === 0) {
       const coordinates = spawnRing.getRandomSpawnLocation();
       foodSprites.push(
         {
-          bounds: CircleObject(coordinates.xSpawn, coordinates.ySpawn, FOOD_SPRITE_STARTING_RADIUS),
+          ...CircleSprite(coordinates.xSpawn, coordinates.ySpawn, FOOD_SPRITE_STARTING_RADIUS),
           spriteMovementVector: {
             x: -((coordinates.xSpawn - CANVAS_SIZE / 2) * (FOOD_SPRITE_MOVEMENT_SPEED)),
             y: -((coordinates.ySpawn - CANVAS_SIZE / 2) * (FOOD_SPRITE_MOVEMENT_SPEED)),
-          },
-          animationState: {
-            radius: FOOD_SPRITE_STARTING_RADIUS,
-            status: ANIMATION_STATES.SHRINKING,
           },
           key: clock,
         },
@@ -125,26 +121,20 @@ function GameCanvas({ clock }) {
       setPlayerSpriteData(newPlayerData);
     }
 
+    // breathing effect
+    if (clock % BREATHING_ANIMATION_SPEED === 0) {
+      playerSpriteData.breathe();
+    }
+
     // move other sprites
     for (let i = 0; i < foodSprites.length; i += 1) {
       const currSprite = foodSprites[i];
-      currSprite.xPos += currSprite.spriteMovementVector.x;
-      currSprite.yPos += currSprite.spriteMovementVector.y;
+      currSprite.bounds.xPos += currSprite.spriteMovementVector.x;
+      currSprite.bounds.yPos += currSprite.spriteMovementVector.y;
 
       // breathing effect
       if (clock % BREATHING_ANIMATION_SPEED === 0) {
-        const { animationState } = currSprite;
-        if (animationState.status === ANIMATION_STATES.GROWING) {
-          animationState.radius += 0.1;
-        } else if (animationState.status === ANIMATION_STATES.SHRINKING) {
-          animationState.radius -= 0.1;
-        }
-        if (animationState.radius / currSprite.radius > 1 + BREATHING_ANIMATION_MAGNITUDE) {
-          animationState.status = ANIMATION_STATES.SHRINKING;
-        } else
-          if (animationState.radius / currSprite.radius < 1 - BREATHING_ANIMATION_MAGNITUDE) {
-            animationState.status = ANIMATION_STATES.GROWING;
-          }
+        currSprite.breathe();
       }
     }
 
@@ -157,14 +147,14 @@ function GameCanvas({ clock }) {
       <PlayerSprite
         xPos={playerSpriteData.bounds.xPos}
         yPos={playerSpriteData.bounds.yPos}
-        radius={playerSpriteData.bounds.radius}
+        radius={playerSpriteData.animationState.radius}
         key={1}
       />
       {foodSprites.map((spriteParams) => (
         <FoodSprite
           xPos={spriteParams.bounds.xPos}
           yPos={spriteParams.bounds.yPos}
-          radius={spriteParams.bounds.radius}
+          radius={spriteParams.animationState.radius}
           key={spriteParams.key}
         />
       ))}
