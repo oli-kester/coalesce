@@ -1,119 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import CircleSprite from './circleSprite';
+import { ColourSchemeContext } from '../coalesce';
 
 /**
  * User-controllable sprite
  * @param {*} props - Inputs are starting x and y position, and a clock signal.
  */
 function PlayerSprite({
-  xPosStart, yPosStart, clock, parentDims,
+  xPos, yPos, radius,
 }) {
-  const PLAYER_SPRITE_STARTING_RADIUS = 12;
-  const spriteData = CircleSprite(xPosStart, yPosStart, PLAYER_SPRITE_STARTING_RADIUS, clock);
-
-  const [movementStatus, setMovementStatus] = useState({
-    UP: false,
-    DOWN: false,
-    LEFT: false,
-    RIGHT: false,
-  });
-
-  const focusRef = useRef(null);
-
-  function keyDown(event) {
-    const currMovementStatus = { ...movementStatus };
-    switch (event.key) {
-      case 'ArrowUp':
-        currMovementStatus.UP = true;
-        break;
-      case 'ArrowDown':
-        currMovementStatus.DOWN = true;
-        break;
-      case 'ArrowLeft':
-        currMovementStatus.LEFT = true;
-        break;
-      case 'ArrowRight':
-        currMovementStatus.RIGHT = true;
-        break;
-      default:
-        break;
-    }
-    setMovementStatus(currMovementStatus);
-  }
-
-  function keyUp(event) {
-    const currMovementStatus = { ...movementStatus };
-    switch (event.key) {
-      case 'ArrowUp':
-        currMovementStatus.UP = false;
-        break;
-      case 'ArrowDown':
-        currMovementStatus.DOWN = false;
-        break;
-      case 'ArrowLeft':
-        currMovementStatus.LEFT = false;
-        break;
-      case 'ArrowRight':
-        currMovementStatus.RIGHT = false;
-        break;
-      default:
-        break;
-    }
-    setMovementStatus(currMovementStatus);
-  }
-
-  // clock-triggered block
-  useEffect(() => {
-    // lock keyboard focus to player
-    focusRef.current.focus();
-    // move sprite
-    const newPlayerBounds = { ...spriteData.spriteBounds };
-    let changed = false;
-    if (movementStatus.UP) {
-      newPlayerBounds.yPos = spriteData.spriteBounds.yPos - 1;
-      changed = true;
-    }
-    if (movementStatus.DOWN) {
-      newPlayerBounds.yPos = spriteData.spriteBounds.yPos + 1;
-      changed = true;
-    }
-    if (movementStatus.LEFT) {
-      newPlayerBounds.xPos = spriteData.spriteBounds.xPos - 1;
-      changed = true;
-    }
-    if (movementStatus.RIGHT) {
-      newPlayerBounds.xPos = spriteData.spriteBounds.xPos + 1;
-      changed = true;
-    }
-    if (changed && parentDims.childCircleBoundsCheck(newPlayerBounds)) {
-      spriteData.setSpriteBounds(newPlayerBounds);
-    }
-  }, [clock]);
+  const ColourScheme = useContext(ColourSchemeContext);
 
   return (
-    <svg width="100%" height="100%" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="sprite-window" ref={focusRef}>
-      <circle
-        cx={spriteData.spriteBounds.xPos}
-        cy={spriteData.spriteBounds.yPos}
-        r={spriteData.animationState.radius}
-        fill={spriteData.ColourScheme.White}
-      />
-    </svg>
+    <circle
+      cx={xPos}
+      cy={yPos}
+      r={radius}
+      fill={ColourScheme.White}
+    />
   );
 }
 
 PlayerSprite.propTypes = {
-  xPosStart: PropTypes.number.isRequired,
-  yPosStart: PropTypes.number.isRequired,
-  clock: PropTypes.number.isRequired,
-  parentDims: PropTypes.shape({
-    xPos: PropTypes.number.isRequired,
-    yPos: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    childCircleBoundsCheck: PropTypes.func.isRequired,
-  }).isRequired,
+  xPos: PropTypes.number.isRequired,
+  yPos: PropTypes.number.isRequired,
+  radius: PropTypes.number.isRequired,
 };
 
 export default PlayerSprite;
