@@ -1,13 +1,13 @@
 /* Static styles for Coalesce */
 
-/* :root {
-    colour scheme
+:root {
+    /* colour scheme  */
     --light-gray: #364545ff;
     --dark-gray: #101919ff;
     --red: #68121eff;
     --white: #f5f5f5ff;
     --light-blue: #44c5c5ff;
-} */
+}
 
 body {
     display: flex;
@@ -35,4 +35,14 @@ h2 {
 .sprite-window {
     position: absolute;
     right: 0px;
+}
+
+.npc {
+    -webkit-filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.534));
+    filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.534));
+}
+
+.player {
+    -webkit-filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.671));
+    filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.671));
 }

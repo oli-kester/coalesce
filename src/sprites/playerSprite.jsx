@@ -18,6 +18,7 @@ function PlayerSprite({
       cy={yPos}
       r={radius}
       fill={ColourScheme.White}
+      className="player"
     />
   );
 }
