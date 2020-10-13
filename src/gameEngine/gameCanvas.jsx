@@ -34,13 +34,13 @@ function GameCanvas({ clock }) {
     RIGHT: false,
   });
 
-  // TODO reduce this over time
-  const SPAWN_INTERVAL = 500;
   const [spawnRing] = useState(SpawnRing(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 1.5));
   const [spriteDeleteBox] = useState(RectObject(-400, -400, CANVAS_SIZE + 800, CANVAS_SIZE + 800));
-  const FOOD_SPRITE_STARTING_RADIUS = 9;
-  const FOOD_SPRITE_MOVEMENT_SPEED = 0.002;
-  const [foodSprites] = useState([]);
+  const NPC_SPAWN_INTERVAL = 500; // TODO reduce this over time
+  const NPC_BASE_RADIUS = 6;
+  const NPC_RADIUS_RANDOMNESS = 1.5;
+  const NPC_MOVEMENT_SPEED = 0.002; // TODO randomize and increase over time
+  const [npcSprites] = useState([]);
 
   const focusRef = useRef(null);
 
@@ -92,18 +92,19 @@ function GameCanvas({ clock }) {
     focusRef.current.focus();
 
     // spawn new sprites
-    if (clock % SPAWN_INTERVAL === 0) {
+    if (clock % NPC_SPAWN_INTERVAL === 0) {
       const coordinates = spawnRing.getRandomSpawnLocation();
+      const npcSizeFactor = ((Math.random() + 0.6) * NPC_RADIUS_RANDOMNESS);
       // TODO spawn more enemies later on
       const spriteType = Math.round(Math.random() + 1);
-      foodSprites.push(
+      npcSprites.push(
         {
-          // TODO randomise new sprite size slightly
-          ...CircleSprite(coordinates.xSpawn, coordinates.ySpawn, FOOD_SPRITE_STARTING_RADIUS),
+          ...CircleSprite(coordinates.xSpawn, coordinates.ySpawn,
+            NPC_BASE_RADIUS * npcSizeFactor),
           // TODO randomise movement angle slightly
           spriteMovementVector: {
-            x: -((coordinates.xSpawn - CANVAS_SIZE / 2) * (FOOD_SPRITE_MOVEMENT_SPEED)),
-            y: -((coordinates.ySpawn - CANVAS_SIZE / 2) * (FOOD_SPRITE_MOVEMENT_SPEED)),
+            x: -((coordinates.xSpawn - CANVAS_SIZE / 2) * (NPC_MOVEMENT_SPEED)),
+            y: -((coordinates.ySpawn - CANVAS_SIZE / 2) * (NPC_MOVEMENT_SPEED)),
           },
           type: spriteType,
           key: clock,
@@ -143,8 +144,8 @@ function GameCanvas({ clock }) {
     }
 
     // move other sprites
-    for (let i = 0; i < foodSprites.length; i += 1) {
-      let currSprite = foodSprites[i];
+    for (let i = 0; i < npcSprites.length; i += 1) {
+      let currSprite = npcSprites[i];
       currSprite.bounds.xPos += currSprite.spriteMovementVector.x;
       currSprite.bounds.yPos += currSprite.spriteMovementVector.y;
 
@@ -154,12 +155,12 @@ function GameCanvas({ clock }) {
       }
     }
 
-    for (let i = 0; i < foodSprites.length; i += 1) {
-      const currSprite = foodSprites[i];
+    for (let i = 0; i < npcSprites.length; i += 1) {
+      const currSprite = npcSprites[i];
 
       // delete sprites that are outside deletion bounds
       if (!spriteDeleteBox.childCircleBoundsCheck(currSprite.bounds)) {
-        foodSprites.splice(i, 1);
+        npcSprites.splice(i, 1);
         i -= 1;
 
         // check for collisions
@@ -174,7 +175,7 @@ function GameCanvas({ clock }) {
         }
         newPlayerSpriteData.animationState.radius = newPlayerSpriteData.bounds.radius - 1;
         setPlayerSpriteData(newPlayerSpriteData);
-        foodSprites.splice(i, 1);
+        npcSprites.splice(i, 1);
         i -= 1;
       }
     }
@@ -189,7 +190,7 @@ function GameCanvas({ clock }) {
         key={1}
       />
       <SpriteTypesContext.Provider value={SPRITE_TYPES}>
-        {foodSprites.map((spriteParams) => (
+        {npcSprites.map((spriteParams) => (
           <NpcSprite
             xPos={spriteParams.bounds.xPos}
             yPos={spriteParams.bounds.yPos}
