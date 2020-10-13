@@ -43,6 +43,7 @@ function GameCanvas({ clock }) {
   const NPC_VECTOR_RANDOMNESS = 0.5;
   const [npcSpawnInterval, setNpcSpawnInterval] = useState(500);
   const [npcMovementSpeed, setNpcMovementSpeed] = useState(0.002);
+  const [spriteTypeSkew, setSpriteTypeSkew] = useState(0.1);
 
   const DIFFICULTY_INCREASE_INTERVAL = 2000;
   const DIFFICULTY_INCREASE_FACTOR = 2;
@@ -103,8 +104,7 @@ function GameCanvas({ clock }) {
       const npcVectorFactor = (Math.random() - 0.5) * (CANVAS_SIZE * NPC_VECTOR_RANDOMNESS);
       const npcPathX = coordinates.xSpawn - CANVAS_SIZE / 2 + npcVectorFactor;
       const npcPathY = coordinates.ySpawn - CANVAS_SIZE / 2 + npcVectorFactor;
-      // TODO spawn more enemies later on
-      const spriteType = Math.round(Math.random() + 1);
+      const spriteType = Math.round(Math.random() + spriteTypeSkew);
       npcSprites.push(
         {
           ...CircleSprite(coordinates.xSpawn, coordinates.ySpawn,
@@ -191,6 +191,7 @@ function GameCanvas({ clock }) {
       setNpcSpawnInterval(npcSpawnInterval / DIFFICULTY_INCREASE_FACTOR);
       setNpcMovementSpeed(npcMovementSpeed * DIFFICULTY_INCREASE_FACTOR);
       setPlayerMovementSpeed(playerMovementSpeed * DIFFICULTY_INCREASE_FACTOR);
+      setSpriteTypeSkew(spriteTypeSkew * DIFFICULTY_INCREASE_FACTOR);
     }
   }, [clock]);
 
