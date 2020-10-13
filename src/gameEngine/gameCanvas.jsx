@@ -46,7 +46,7 @@ function GameCanvas({ clock }) {
   const [spriteTypeSkew, setSpriteTypeSkew] = useState(0.1);
 
   const DIFFICULTY_INCREASE_INTERVAL = 2000;
-  const DIFFICULTY_INCREASE_FACTOR = 2;
+  const DIFFICULTY_INCREASE_FACTOR = 2; // must be a whole number
 
   const focusRef = useRef(null);
 
@@ -187,11 +187,14 @@ function GameCanvas({ clock }) {
     }
 
     // at set intervals, increase game difficulty.
-    if (clock % DIFFICULTY_INCREASE_INTERVAL === 0) {
-      setNpcSpawnInterval(npcSpawnInterval / DIFFICULTY_INCREASE_FACTOR);
-      setNpcMovementSpeed(npcMovementSpeed * DIFFICULTY_INCREASE_FACTOR);
-      setPlayerMovementSpeed(playerMovementSpeed * DIFFICULTY_INCREASE_FACTOR);
-      setSpriteTypeSkew(spriteTypeSkew * DIFFICULTY_INCREASE_FACTOR);
+  if (clock !== 0 && clock % DIFFICULTY_INCREASE_INTERVAL === 0) {
+      const incrementFactor = 1 + DIFFICULTY_INCREASE_FACTOR / 10;
+      const decrementFactor = 1 - DIFFICULTY_INCREASE_FACTOR / 6;
+
+      setNpcSpawnInterval(Math.round(npcSpawnInterval * decrementFactor));
+      setNpcMovementSpeed(npcMovementSpeed * incrementFactor);
+      setPlayerMovementSpeed(playerMovementSpeed * incrementFactor);
+      setSpriteTypeSkew(spriteTypeSkew * incrementFactor);
     }
   }, [clock]);
 
