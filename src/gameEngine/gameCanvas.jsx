@@ -34,13 +34,14 @@ function GameCanvas({ clock }) {
     RIGHT: false,
   });
 
+  const [npcSprites] = useState([]);
   const [spawnRing] = useState(SpawnRing(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 1.5));
   const [spriteDeleteBox] = useState(RectObject(-400, -400, CANVAS_SIZE + 800, CANVAS_SIZE + 800));
   const NPC_SPAWN_INTERVAL = 500; // TODO reduce this over time
   const NPC_BASE_RADIUS = 6;
   const NPC_RADIUS_RANDOMNESS = 1.5;
   const NPC_MOVEMENT_SPEED = 0.002; // TODO randomize and increase over time
-  const [npcSprites] = useState([]);
+  const NPC_VECTOR_RANDOMNESS = 0.5;
 
   const focusRef = useRef(null);
 
@@ -94,17 +95,20 @@ function GameCanvas({ clock }) {
     // spawn new sprites
     if (clock % NPC_SPAWN_INTERVAL === 0) {
       const coordinates = spawnRing.getRandomSpawnLocation();
-      const npcSizeFactor = ((Math.random() + 0.6) * NPC_RADIUS_RANDOMNESS);
+      const npcSizeFactor = (Math.random() + 0.6) * NPC_RADIUS_RANDOMNESS;
+      const npcVectorFactor = (Math.random() - 0.5) * (CANVAS_SIZE * NPC_VECTOR_RANDOMNESS);
+      console.log(npcVectorFactor);
+      const npcPathX = coordinates.xSpawn - CANVAS_SIZE / 2 + npcVectorFactor;
+      const npcPathY = coordinates.ySpawn - CANVAS_SIZE / 2 + npcVectorFactor;
       // TODO spawn more enemies later on
       const spriteType = Math.round(Math.random() + 1);
       npcSprites.push(
         {
           ...CircleSprite(coordinates.xSpawn, coordinates.ySpawn,
             NPC_BASE_RADIUS * npcSizeFactor),
-          // TODO randomise movement angle slightly
           spriteMovementVector: {
-            x: -((coordinates.xSpawn - CANVAS_SIZE / 2) * (NPC_MOVEMENT_SPEED)),
-            y: -((coordinates.ySpawn - CANVAS_SIZE / 2) * (NPC_MOVEMENT_SPEED)),
+            x: -(npcPathX * NPC_MOVEMENT_SPEED),
+            y: -(npcPathY * NPC_MOVEMENT_SPEED),
           },
           type: spriteType,
           key: clock,
