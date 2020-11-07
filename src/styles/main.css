@@ -37,12 +37,17 @@ h2 {
     right: 0px;
 }
 
-.npc {
+.food {
     -webkit-filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.534));
     filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.534));
 }
 
+.enemy {
+    -webkit-filter: drop-shadow(0px 0px 3px var(--red));
+    filter: drop-shadow(0px 0px 3px var(--red));
+}
+
 .player {
-    -webkit-filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.671));
-    filter: drop-shadow(0px 0px 3px rgba(166, 179, 179, 0.671));
+    -webkit-filter: drop-shadow(0px 0px 3px var(--light-blue));
+    filter: drop-shadow(0px 0px 3px var(--light-blue));
 }
