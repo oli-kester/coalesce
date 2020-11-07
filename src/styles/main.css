@@ -9,6 +9,12 @@
     --light-blue: #44c5c5ff;
 }
 
+/* Remove default margin & padding from all elements */
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -18,8 +24,34 @@ body {
     letter-spacing: 2px;
 }
 
-h1 {
-    margin: 0px;
+.main-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-bar {
+    width: 100%;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+.score-bar {
+    width: 100%;
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
 }
 
 h2 {
@@ -29,7 +61,6 @@ h2 {
 .canvas {
     position: relative;
     background-color: #111;
-    margin: 20px auto 50px auto;
 }
 
 .sprite-window {

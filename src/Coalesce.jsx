@@ -31,11 +31,17 @@ function Coalesce() {
 
   return (
     <ColourSchemeContext.Provider value={COLOUR_SCHEME}>
-      <h1>Coalesce</h1>
-      <h2>Pure Reactive Joy.</h2>
-      <GameCanvas clock={clock} />
-      <h3>Clock counter</h3>
-      <h3>{clock}</h3>
+      <div className="main-container">
+        <div className="title-bar">
+          <h1>Coalesce</h1>
+          <h2>Pure Reactive Joy.</h2>
+        </div>
+        <GameCanvas clock={clock} />
+        <div className="score-bar">
+          <h3>Clock counter =</h3>
+          <h3>{clock}</h3>
+        </div>
+      </div>
     </ColourSchemeContext.Provider>
   );
 }

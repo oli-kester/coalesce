@@ -17,7 +17,6 @@ function NpcSprite({
       cy={yPos}
       r={radius}
       fill={type === SPRITE_TYPES.FOOD ? foodStyle : enemyStyle}
-      // TODO different colour shadows based on type
       className={`npc  + ${(type === SPRITE_TYPES.FOOD ? 'food' : 'enemy')}`}
     />
   );
