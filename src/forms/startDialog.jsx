@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-function StartDialog({ toggleClockActive }) {
-  const [displayStartDialog, setDisplayStartDialog] = useState(true);
-
+function StartDialog({ toggleClockActive, displayStartDialog, setDisplayStartDialog }) {
   function start() {
     toggleClockActive();
     setDisplayStartDialog(false);
@@ -26,6 +24,8 @@ function StartDialog({ toggleClockActive }) {
 }
 StartDialog.propTypes = {
   toggleClockActive: PropTypes.func.isRequired,
+  displayStartDialog: PropTypes.bool.isRequired,
+  setDisplayStartDialog: PropTypes.func.isRequired,
 };
 
 export default StartDialog;

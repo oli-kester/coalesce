@@ -31,6 +31,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
     MARGIN_SIZE, MARGIN_SIZE, CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
     CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
   ));
+  const [displayStartDialog, setDisplayStartDialog] = useState(true);
   const [displayEndDialog, setDisplayEndDialog] = useState(false);
 
   // ----------------------------- SPRITE CONFIG -------------------------
@@ -67,6 +68,20 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
   const [npcSpawnInterval, setNpcSpawnInterval] = useState(STARTING_NPC_SPAWN_INTERVAL);
   const [npcMovementSpeed, setNpcMovementSpeed] = useState(STARTING_NPC_MOVEMENT_SPEED);
   const [spriteTypeSkew, setSpriteTypeSkew] = useState(STARTING_SPRITE_TYPE_SKEW);
+
+  // ----------------------------- GAME LOGIC -------------------------
+  function reset() {
+    setNpcSprites([]);
+    setPlayerSpriteData({
+      ...CircleSprite(canvasWidth / 2,
+        canvasHeight / 2, PLAYER_SPRITE_STARTING_RADIUS),
+    });
+    setNpcMovementSpeed(STARTING_NPC_MOVEMENT_SPEED);
+    setSpriteTypeSkew(STARTING_SPRITE_TYPE_SKEW);
+    setNpcSpawnInterval(STARTING_NPC_SPAWN_INTERVAL);
+    setPlayerMovementSpeed(PLAYER_STARTING_MOVEMENT_SPEED);
+    resetClock();
+  }
 
   // --------------------------- KEYBOARD HANDLERS  ----------------------
   const keyboardRef = useRef();
@@ -112,18 +127,17 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
     setPlayerMovementStatus(newMovementStatus);
   }
 
-  // ----------------------------- GAME LOGIC -------------------------
-  function reset() {
-    setNpcSprites([]);
-    setPlayerSpriteData({
-      ...CircleSprite(canvasWidth / 2,
-        canvasHeight / 2, PLAYER_SPRITE_STARTING_RADIUS),
-    });
-    setNpcMovementSpeed(STARTING_NPC_MOVEMENT_SPEED);
-    setSpriteTypeSkew(STARTING_SPRITE_TYPE_SKEW);
-    setNpcSpawnInterval(STARTING_NPC_SPAWN_INTERVAL);
-    setPlayerMovementSpeed(PLAYER_STARTING_MOVEMENT_SPEED);
-    resetClock();
+  function keyPress(event) {
+    if (event.key === 'Enter') {
+      if (displayStartDialog) {
+        toggleClockActive();
+        setDisplayStartDialog(false);
+      }
+      if (displayEndDialog) {
+        reset();
+        setDisplayEndDialog(false);
+      }
+    }
   }
 
   // ----------------------------- VISUAL LOGIC -------------------------
@@ -264,8 +278,12 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
 
   // ----------------------------- RENDERING -------------------------
   return (
-    <div role="button" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} ref={keyboardRef} style={{ width: '100%', height: '100%' }}>
-      <StartDialog toggleClockActive={toggleClockActive} />
+    <div role="button" onKeyDown={keyDown} onKeyUp={keyUp} onKeyPress={keyPress} tabIndex={0} ref={keyboardRef} style={{ width: '100%', height: '100%' }}>
+      <StartDialog
+        toggleClockActive={toggleClockActive}
+        displayStartDialog={displayStartDialog}
+        setDisplayStartDialog={setDisplayStartDialog}
+      />
       <EndDialog
         resetGame={reset}
         displayEndDialog={displayEndDialog}
@@ -291,7 +309,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
           ))}
         </SpriteTypesContext.Provider>
       </svg>
-    </div >
+    </div>
   );
 }
 
