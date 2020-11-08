@@ -7,6 +7,7 @@ import PlayerSprite from '../sprites/playerSprite';
 import NpcSprite from '../sprites/npcSprite';
 import RectObject, { SpawnRing, collisionCheck } from './engine';
 import CircleSprite, { breathe } from '../sprites/circleSprite';
+import StartDialog from '../forms/startDialog';
 
 const SPRITE_TYPES = { FOOD: 1, ENEMY: 2 };
 export const SpriteTypesContext = createContext(SPRITE_TYPES);
@@ -29,7 +30,6 @@ function GameCanvas({ clock, toggleClockActive }) {
     MARGIN_SIZE, MARGIN_SIZE, CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
     CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
   ));
-  const [displaySplashScreen, setDisplaySplashScreen] = useState(true);
   const [displayGameOverScreen, setDisplayGameOverScreen] = useState(false);
 
   // ----------------------------- SPRITE CONFIG -------------------------
@@ -104,13 +104,6 @@ function GameCanvas({ clock, toggleClockActive }) {
         break;
     }
     setPlayerMovementStatus(newMovementStatus);
-  }
-
-  // --------------------------- BUTTON HANDLERS -------------------------
-
-  function start() {
-    toggleClockActive();
-    setDisplaySplashScreen(false);
   }
 
   // ----------------------------- VISUAL LOGIC -------------------------
@@ -254,18 +247,7 @@ function GameCanvas({ clock, toggleClockActive }) {
   // ----------------------------- RENDERING -------------------------
   return (
     <div>
-      <div className={`splash-screen ${displaySplashScreen ? 'show' : 'hide'}`}>
-        <h2>Welcome to Coalesce. </h2>
-        <ul className="instructions">
-          <li><span>Use the arrow keys to move. </span></li>
-          <li><span>Eat the blue nodes - they are food. </span></li>
-          <li><span>Avoid the red nodes - they are enemies. </span></li>
-          <li>
-            <span>See how long you can last. It&apos;s survival of the fittest out here! </span>
-          </li>
-        </ul>
-        <button onClick={start} type="button" className="start-button" disabled={!displaySplashScreen}>Start</button>
-      </div>
+      <StartDialog toggleClockActive={toggleClockActive} />
       <svg onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="canvas" ref={canvasRef}>
         <PlayerSprite
           xPos={playerSpriteData.bounds.xPos}
