@@ -12,6 +12,11 @@ const SPRITE_TYPES = { FOOD: 1, ENEMY: 2 };
 export const SpriteTypesContext = createContext(SPRITE_TYPES);
 
 function GameCanvas({ clock }) {
+  // ----------------------------- GAME CONFIG -------------------------
+  const DIFFICULTY_INCREASE_INTERVAL = 2000;
+  const DIFFICULTY_INCREASE_FACTOR = 2; // must be a whole number
+
+  // ----------------------------- CANVAS CONFIG -------------------------
   const [canvasRef, {
     // eslint-disable-next-line no-unused-vars
     x: _x, y: _y, width: canvasWidth, height: canvasHeight,
@@ -23,8 +28,10 @@ function GameCanvas({ clock }) {
     CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
   ));
 
+  // ----------------------------- SPRITE CONFIG -------------------------
   const BREATHING_ANIMATION_SPEED = 4;
 
+  // PLAYER  -------------------------
   const PLAYER_SPRITE_STARTING_RADIUS = 12;
   const PLAYER_SPRITE_GROWTH_RATE = 3;
   const [playerMovementSpeed, setPlayerMovementSpeed] = useState(1);
@@ -39,6 +46,7 @@ function GameCanvas({ clock }) {
     RIGHT: false,
   });
 
+  // NPCS  -------------------------
   const [npcSprites] = useState([]);
   const [spawnRing, setSpawnRing] = useState(SpawnRing(CANVAS_STARTING_SIZE / 2,
     CANVAS_STARTING_SIZE / 2, CANVAS_STARTING_SIZE / 1.5));
@@ -51,9 +59,7 @@ function GameCanvas({ clock }) {
   const [npcMovementSpeed, setNpcMovementSpeed] = useState(0.001);
   const [spriteTypeSkew, setSpriteTypeSkew] = useState(0.1);
 
-  const DIFFICULTY_INCREASE_INTERVAL = 2000;
-  const DIFFICULTY_INCREASE_FACTOR = 2; // must be a whole number
-
+  // --------------------------- KEYBOARD HANDLERS  ----------------------
   function keyDown(event) {
     const newMovementStatus = { ...playerMovementStatus };
     switch (event.key) {
@@ -96,7 +102,8 @@ function GameCanvas({ clock }) {
     setPlayerMovementStatus(newMovementStatus);
   }
 
-  // sync dimensions - triggered by resizing window
+  // ----------------------------- VISUAL LOGIC -------------------------
+  // sync canvas dimensions - triggered by resizing window
   useEffect(() => {
     setCanvasBounds(RectObject(MARGIN_SIZE, MARGIN_SIZE, canvasWidth - MARGIN_SIZE * 2,
       canvasHeight - MARGIN_SIZE * 2));
@@ -226,6 +233,7 @@ function GameCanvas({ clock }) {
     }
   }, [clock]);
 
+  // ----------------------------- RENDERING -------------------------
   return (
     <svg onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="canvas" ref={canvasRef}>
       <PlayerSprite
