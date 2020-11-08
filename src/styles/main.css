@@ -124,27 +124,38 @@ h2.tagline {
     opacity: 0;
 }
 
-.instructions {
+.dialog-details {
     text-align: left;
     width: 70%;
-}
-
-.instructions li {
-    margin-top: 10px;
-    margin-bottom: 10px;
-
     letter-spacing: 1.4px;
     font-weight: 300;
     line-height: 150%;
+}
+
+.dialog-details p {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dialog-details h3 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dialog-details li {
+    margin-top: 10px;
+    margin-bottom: 10px;
 
     list-style-type: circle;
 }
-.instructions li span{
+.dialog-details li span{
     position: relative;
     left: 10px;
 }
 
-.start-button {
+.button {
     background-color: var(--light-blue);
     border: none;
     border-radius: 15%;
@@ -156,7 +167,7 @@ h2.tagline {
     opacity: 0.9;
 }
 
-.start-button:active {
+.button:active {
     background-color: var(--red);
 }
 

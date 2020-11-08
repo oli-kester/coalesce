@@ -8,13 +8,14 @@ import NpcSprite from '../sprites/npcSprite';
 import RectObject, { SpawnRing, collisionCheck } from './engine';
 import CircleSprite, { breathe } from '../sprites/circleSprite';
 import StartDialog from '../forms/startDialog';
+import EndDialog from '../forms/endDialog';
 
 const SPRITE_TYPES = { FOOD: 1, ENEMY: 2 };
 export const SpriteTypesContext = createContext(SPRITE_TYPES);
 
 // TODO pause button
 
-function GameCanvas({ clock, toggleClockActive }) {
+function GameCanvas({ clock, toggleClockActive, resetClock }) {
   // ----------------------------- GAME CONFIG -------------------------
   const DIFFICULTY_INCREASE_INTERVAL = 2000;
   const DIFFICULTY_INCREASE_FACTOR = 2; // must be a whole number
@@ -30,7 +31,7 @@ function GameCanvas({ clock, toggleClockActive }) {
     MARGIN_SIZE, MARGIN_SIZE, CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
     CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
   ));
-  const [displayGameOverScreen, setDisplayGameOverScreen] = useState(false);
+  const [displayEndDialog, setDisplayEndDialog] = useState(false);
 
   // ----------------------------- SPRITE CONFIG -------------------------
   const BREATHING_ANIMATION_SPEED = 4;
@@ -38,7 +39,8 @@ function GameCanvas({ clock, toggleClockActive }) {
   // PLAYER  -------------------------
   const PLAYER_SPRITE_STARTING_RADIUS = 12;
   const PLAYER_SPRITE_GROWTH_RATE = 3;
-  const [playerMovementSpeed, setPlayerMovementSpeed] = useState(1);
+  const PLAYER_STARTING_MOVEMENT_SPEED = 1;
+  const [playerMovementSpeed, setPlayerMovementSpeed] = useState(PLAYER_STARTING_MOVEMENT_SPEED);
   const [playerSpriteData, setPlayerSpriteData] = useState({
     ...CircleSprite(CANVAS_STARTING_SIZE / 2,
       CANVAS_STARTING_SIZE / 2, PLAYER_SPRITE_STARTING_RADIUS),
@@ -51,17 +53,20 @@ function GameCanvas({ clock, toggleClockActive }) {
   });
 
   // NPCS  -------------------------
-  const [npcSprites] = useState([]);
+  const NPC_BASE_RADIUS = 6;
+  const NPC_RADIUS_RANDOMNESS = 1.5;
+  const NPC_VECTOR_RANDOMNESS = 0.5;
+  const STARTING_NPC_MOVEMENT_SPEED = 0.001;
+  const STARTING_SPRITE_TYPE_SKEW = 0.1;
+  const STARTING_NPC_SPAWN_INTERVAL = 500;
+  const [npcSprites, setNpcSprites] = useState([]);
   const [spawnRing, setSpawnRing] = useState(SpawnRing(CANVAS_STARTING_SIZE / 2,
     CANVAS_STARTING_SIZE / 2, CANVAS_STARTING_SIZE / 1.5));
   const [spriteDeleteBox, setSpriteDeleteBox] = useState(RectObject(-400, -400,
     CANVAS_STARTING_SIZE + 800, CANVAS_STARTING_SIZE + 800));
-  const NPC_BASE_RADIUS = 6;
-  const NPC_RADIUS_RANDOMNESS = 1.5;
-  const NPC_VECTOR_RANDOMNESS = 0.5;
-  const [npcSpawnInterval, setNpcSpawnInterval] = useState(500);
-  const [npcMovementSpeed, setNpcMovementSpeed] = useState(0.001);
-  const [spriteTypeSkew, setSpriteTypeSkew] = useState(0.1);
+  const [npcSpawnInterval, setNpcSpawnInterval] = useState(STARTING_NPC_SPAWN_INTERVAL);
+  const [npcMovementSpeed, setNpcMovementSpeed] = useState(STARTING_NPC_MOVEMENT_SPEED);
+  const [spriteTypeSkew, setSpriteTypeSkew] = useState(STARTING_SPRITE_TYPE_SKEW);
 
   // --------------------------- KEYBOARD HANDLERS  ----------------------
   function keyDown(event) {
@@ -104,6 +109,20 @@ function GameCanvas({ clock, toggleClockActive }) {
         break;
     }
     setPlayerMovementStatus(newMovementStatus);
+  }
+
+  // ----------------------------- GAME LOGIC -------------------------
+  function reset() {
+    setNpcSprites([]);
+    setPlayerSpriteData({
+      ...CircleSprite(canvasWidth / 2,
+        canvasHeight / 2, PLAYER_SPRITE_STARTING_RADIUS),
+    });
+    setNpcMovementSpeed(STARTING_NPC_MOVEMENT_SPEED);
+    setSpriteTypeSkew(STARTING_SPRITE_TYPE_SKEW);
+    setNpcSpawnInterval(STARTING_NPC_SPAWN_INTERVAL);
+    setPlayerMovementSpeed(PLAYER_STARTING_MOVEMENT_SPEED);
+    resetClock();
   }
 
   // ----------------------------- VISUAL LOGIC -------------------------
@@ -225,7 +244,7 @@ function GameCanvas({ clock, toggleClockActive }) {
         // game over when sprite size is zero
         if (newPlayerSpriteData.bounds.radius <= 0) {
           toggleClockActive();
-          setDisplayGameOverScreen(true);
+          setDisplayEndDialog(true);
         }
       }
     }
@@ -248,6 +267,12 @@ function GameCanvas({ clock, toggleClockActive }) {
   return (
     <div>
       <StartDialog toggleClockActive={toggleClockActive} />
+      <EndDialog
+        resetGame={reset}
+        displayEndDialog={displayEndDialog}
+        setDisplayEndDialog={setDisplayEndDialog}
+        clock={clock}
+      />
       <svg onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="canvas" ref={canvasRef}>
         <PlayerSprite
           xPos={playerSpriteData.bounds.xPos}
@@ -274,6 +299,7 @@ function GameCanvas({ clock, toggleClockActive }) {
 GameCanvas.propTypes = {
   clock: PropTypes.number.isRequired,
   toggleClockActive: PropTypes.func.isRequired,
+  resetClock: PropTypes.func.isRequired,
 };
 
 export default GameCanvas;

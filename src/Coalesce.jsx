@@ -23,6 +23,11 @@ function Coalesce() {
   const toggleClockActive = useCallback(() => {
     setClockActive(!clockActive);
   });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const resetClock = useCallback(() => {
+    setClock(0);
+    setClockActive(true);
+  });
 
   useEffect(() => {
     let timer;
@@ -45,7 +50,7 @@ function Coalesce() {
           <h1>Coalesce</h1>
           <h2 className="tagline">Pure Reactive Play.</h2>
         </div>
-        <GameCanvas clock={clock} toggleClockActive={toggleClockActive} />
+        <GameCanvas clock={clock} toggleClockActive={toggleClockActive} resetClock={resetClock} />
         <div className="score-bar">
           <h3>Score -</h3>
           <h3>{clock}</h3>
