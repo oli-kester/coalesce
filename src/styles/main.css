@@ -1,5 +1,7 @@
 /* Static styles for Coalesce */
 
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap');
+
 :root {
     /* colour scheme  */
     --light-gray: #364545ff;
@@ -22,7 +24,8 @@ body {
     text-align: center;
     color: #f5f5f5;
     letter-spacing: 2px;
-    /* TODO insert better fonts. */
+
+    font-family: 'Lato', sans-serif;
 }
 
 .main-container {
@@ -37,13 +40,13 @@ body {
 
 .title-bar {
     width: 100%;
-    margin-bottom: 10px;
+    margin: 10px 0px 10px 0px;
 
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: baseline;
-    
+    align-items: center;
+
     z-index: 3;
 }
 
@@ -55,12 +58,23 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: baseline;
-    
+
     z-index: 3;
 }
 
-h2 {
+.score-bar h3 {
+    margin: 0px 5px 0px 5px;
+}
+
+h1 {
+    letter-spacing: 3px;
+    font-weight: 700;
+}
+
+h2.tagline {
     font-style: italic;
+    font-weight: 400;
+    font-size: 120%;
 }
 
 .canvas {
@@ -68,7 +82,7 @@ h2 {
     background-color: #111;
     width: 90%;
     height: 80vh;
-    
+
     z-index: 1;
 }
 
@@ -99,6 +113,12 @@ h2 {
     transition: opacity 0.5s, top 0.5s;
 }
 
+.splash-screen h2 {
+    font-size: 200%;
+    letter-spacing: 3px;
+    font-weight: 400;
+}
+
 .splash-screen.hide {
     top: -50px;
     opacity: 0;
@@ -110,10 +130,18 @@ h2 {
 }
 
 .instructions li {
-    margin-top: 7px;
-    margin-bottom: 7px;
-    letter-spacing: 0.8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    letter-spacing: 1.4px;
+    font-weight: 300;
+    line-height: 150%;
+
     list-style-type: circle;
+}
+.instructions li span{
+    position: relative;
+    left: 10px;
 }
 
 .start-button {

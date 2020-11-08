@@ -40,11 +40,11 @@ function Coalesce() {
       <div className="main-container">
         <div className="title-bar">
           <h1>Coalesce</h1>
-          <h2>Pure Reactive Play.</h2>
+          <h2 className="tagline">Pure Reactive Play.</h2>
         </div>
         <GameCanvas clock={clock} toggleClockActive={toggleClockActive} />
         <div className="score-bar">
-          <h3>Clock counter =</h3>
+          <h3>Score -</h3>
           <h3>{clock}</h3>
         </div>
       </div>
