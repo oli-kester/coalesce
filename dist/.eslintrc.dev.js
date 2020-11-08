@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module'
   },
-  plugins: ['react'],
+  plugins: ['react', 'react-hooks'],
   rules: {
     // "import/no-named-as-default": 0
     'import/no-cycle': 0,

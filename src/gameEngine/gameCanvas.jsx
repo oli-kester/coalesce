@@ -129,6 +129,7 @@ function GameCanvas({ clock, toggleClockActive }) {
     newPlayerBounds.yPos = canvasHeight / 2;
     newPlayerData.bounds = newPlayerBounds;
     setPlayerSpriteData(newPlayerData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasWidth, canvasHeight]);
 
   // clock-triggered block
@@ -241,6 +242,7 @@ function GameCanvas({ clock, toggleClockActive }) {
       setPlayerMovementSpeed(playerMovementSpeed * incrementFactor);
       setSpriteTypeSkew(spriteTypeSkew * incrementFactor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
 
   // ----------------------------- RENDERING -------------------------
@@ -252,7 +254,9 @@ function GameCanvas({ clock, toggleClockActive }) {
           <li><span>Use the arrow keys to move. </span></li>
           <li><span>Eat the blue nodes - they are food. </span></li>
           <li><span>Avoid the red nodes - they are enemies. </span></li>
-          <li><span>See how long you can last. It&apos;s survival of the fittest out here! </span></li>
+          <li>
+            <span>See how long you can last. It&apos;s survival of the fittest out here! </span>
+          </li>
         </ul>
         <button onClick={start} type="button" className="start-button" disabled={!displaySplashScreen}>Start</button>
       </div>

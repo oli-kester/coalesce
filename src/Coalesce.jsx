@@ -1,4 +1,6 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, {
+  createContext, useCallback, useEffect, useState,
+} from 'react';
 import GameCanvas from './gameEngine/gameCanvas';
 import './styles/main.css';
 
@@ -17,6 +19,7 @@ function Coalesce() {
 
   const [clock, setClock] = useState(0);
   const [clockActive, setClockActive] = useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const toggleClockActive = useCallback(() => {
     setClockActive(!clockActive);
   });
@@ -33,7 +36,7 @@ function Coalesce() {
     };
   });
 
-// TODO add about section
+  // TODO add about section
 
   return (
     <ColourSchemeContext.Provider value={COLOUR_SCHEME}>
