@@ -17,6 +17,7 @@ function StartDialog({ toggleClockActive, displayStartDialog, setDisplayStartDia
         <li>
           <span>See how long you can last. It&apos;s survival of the fittest out here! </span>
         </li>
+        <li><span>Hit the enter key to begin. </span></li>
       </ul>
       <button onClick={start} type="button" className="button" disabled={!displayStartDialog}>Start</button>
     </div>

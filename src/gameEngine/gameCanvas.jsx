@@ -39,6 +39,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
 
   // PLAYER  -------------------------
   const PLAYER_SPRITE_STARTING_RADIUS = 12;
+  const PLAYER_SPRITE_MAX_RADIUS = 90;
   const PLAYER_SPRITE_GROWTH_RATE = 3;
   const PLAYER_STARTING_MOVEMENT_SPEED = 1;
   const [playerMovementSpeed, setPlayerMovementSpeed] = useState(PLAYER_STARTING_MOVEMENT_SPEED);
@@ -224,6 +225,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
     // move other sprites
     for (let i = 0; i < npcSprites.length; i += 1) {
       let currSprite = npcSprites[i];
+      // TODO make enemies home in on player (psuedo-AI)
       currSprite.bounds.xPos += currSprite.spriteMovementVector.x;
       currSprite.bounds.yPos += currSprite.spriteMovementVector.y;
 
@@ -245,7 +247,8 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
         // TODO - make this work based on animation size
       } else if (collisionCheck(playerSpriteData.bounds, currSprite.bounds)) {
         const newPlayerSpriteData = { ...playerSpriteData };
-        if (currSprite.type === SPRITE_TYPES.FOOD) {
+        if (currSprite.type === SPRITE_TYPES.FOOD
+          && playerSpriteData.bounds.radius <= PLAYER_SPRITE_MAX_RADIUS) {
           newPlayerSpriteData.bounds.radius += PLAYER_SPRITE_GROWTH_RATE;
         } else {
           newPlayerSpriteData.bounds.radius -= PLAYER_SPRITE_GROWTH_RATE;
