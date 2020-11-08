@@ -11,7 +11,9 @@ import CircleSprite, { breathe } from '../sprites/circleSprite';
 const SPRITE_TYPES = { FOOD: 1, ENEMY: 2 };
 export const SpriteTypesContext = createContext(SPRITE_TYPES);
 
-function GameCanvas({ clock }) {
+// TODO pause button
+
+function GameCanvas({ clock, toggleClockActive }) {
   // ----------------------------- GAME CONFIG -------------------------
   const DIFFICULTY_INCREASE_INTERVAL = 2000;
   const DIFFICULTY_INCREASE_FACTOR = 2; // must be a whole number
@@ -27,6 +29,7 @@ function GameCanvas({ clock }) {
     MARGIN_SIZE, MARGIN_SIZE, CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
     CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
   ));
+  const [displaySplashScreen, setDisplaySplashScreen] = useState(true);
 
   // ----------------------------- SPRITE CONFIG -------------------------
   const BREATHING_ANIMATION_SPEED = 4;
@@ -100,6 +103,13 @@ function GameCanvas({ clock }) {
         break;
     }
     setPlayerMovementStatus(newMovementStatus);
+  }
+
+  // --------------------------- BUTTON HANDLERS -------------------------
+
+  function start() {
+    toggleClockActive();
+    setDisplaySplashScreen(false);
   }
 
   // ----------------------------- VISUAL LOGIC -------------------------
@@ -235,30 +245,43 @@ function GameCanvas({ clock }) {
 
   // ----------------------------- RENDERING -------------------------
   return (
-    <svg onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="canvas" ref={canvasRef}>
-      <PlayerSprite
-        xPos={playerSpriteData.bounds.xPos}
-        yPos={playerSpriteData.bounds.yPos}
-        radius={playerSpriteData.animationState.radius}
-        key={1}
-      />
-      <SpriteTypesContext.Provider value={SPRITE_TYPES}>
-        {npcSprites.map((spriteParams) => (
-          <NpcSprite
-            xPos={spriteParams.bounds.xPos}
-            yPos={spriteParams.bounds.yPos}
-            radius={spriteParams.animationState.radius}
-            type={spriteParams.type}
-            key={spriteParams.key}
-          />
-        ))}
-      </SpriteTypesContext.Provider>
-    </svg>
+    <div>
+      <div className={`splash-screen ${displaySplashScreen ? 'show' : 'hide'}`}>
+        <h2>Welcome to Coalesce. </h2>
+        <ul className="instructions">
+          <li>Use the arrow keys to move. </li>
+          <li>Eat the blue nodes - they are food. </li>
+          <li>Avoid the red nodes - they are enemies. </li>
+          <li>See how long you can last. It&apos;s survival of the fittest out here! </li>
+        </ul>
+        <button onClick={start} type="button" className="start-button" disabled={!displaySplashScreen}>Start</button>
+      </div>
+      <svg onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="canvas" ref={canvasRef}>
+        <PlayerSprite
+          xPos={playerSpriteData.bounds.xPos}
+          yPos={playerSpriteData.bounds.yPos}
+          radius={playerSpriteData.animationState.radius}
+          key={1}
+        />
+        <SpriteTypesContext.Provider value={SPRITE_TYPES}>
+          {npcSprites.map((spriteParams) => (
+            <NpcSprite
+              xPos={spriteParams.bounds.xPos}
+              yPos={spriteParams.bounds.yPos}
+              radius={spriteParams.animationState.radius}
+              type={spriteParams.type}
+              key={spriteParams.key}
+            />
+          ))}
+        </SpriteTypesContext.Provider>
+      </svg>
+    </div>
   );
 }
 
 GameCanvas.propTypes = {
   clock: PropTypes.number.isRequired,
+  toggleClockActive: PropTypes.func.isRequired,
 };
 
 export default GameCanvas;

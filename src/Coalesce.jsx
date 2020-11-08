@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import GameCanvas from './gameEngine/gameCanvas';
 import './styles/main.css';
 
@@ -16,25 +16,33 @@ function Coalesce() {
   const UPDATE_INTERVAL = 4.17; // this is 240Hz in ms.
 
   const [clock, setClock] = useState(0);
+  const [clockActive, setClockActive] = useState(false);
+  const toggleClockActive = useCallback(() => {
+    setClockActive(!clockActive);
+  });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setClock(clock + 1);
-    }, UPDATE_INTERVAL);
-
+    let timer;
+    if (clockActive) {
+      timer = setInterval(() => {
+        setClock(clock + 1);
+      }, UPDATE_INTERVAL);
+    }
     return () => {
       clearInterval(timer);
     };
   });
+
+// TODO add about section
 
   return (
     <ColourSchemeContext.Provider value={COLOUR_SCHEME}>
       <div className="main-container">
         <div className="title-bar">
           <h1>Coalesce</h1>
-          <h2>Pure Reactive Joy.</h2>
+          <h2>Pure Reactive Play.</h2>
         </div>
-        <GameCanvas clock={clock} />
+        <GameCanvas clock={clock} toggleClockActive={toggleClockActive} />
         <div className="score-bar">
           <h3>Clock counter =</h3>
           <h3>{clock}</h3>
