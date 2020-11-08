@@ -281,7 +281,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
 
   // ----------------------------- RENDERING -------------------------
   return (
-    <div role="button" onKeyDown={keyDown} onKeyUp={keyUp} onKeyPress={keyPress} tabIndex={0} ref={keyboardRef} style={{ width: '100%', height: '100%' }}>
+    <div role="button" onKeyDown={keyDown} onKeyUp={keyUp} onKeyPress={keyPress} tabIndex={0} ref={keyboardRef} style={{ width: '100%', height: '100%' }} className="game-container">
       <StartDialog
         toggleClockActive={toggleClockActive}
         displayStartDialog={displayStartDialog}
@@ -293,6 +293,10 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
         setDisplayEndDialog={setDisplayEndDialog}
         clock={clock}
       />
+      <div className="score">
+        <span>Score - </span>
+        <span>{clock}</span>
+      </div>
       <svg className="canvas" ref={canvasRef}>
         <PlayerSprite
           xPos={playerSpriteData.bounds.xPos}

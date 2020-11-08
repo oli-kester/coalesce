@@ -50,7 +50,7 @@ body {
     z-index: 3;
 }
 
-.score-bar {
+.bottom-bar {
     width: 100%;
     margin-top: 10px;
 
@@ -60,10 +60,6 @@ body {
     align-items: baseline;
 
     z-index: 3;
-}
-
-.score-bar h3 {
-    margin: 0px 5px 0px 5px;
 }
 
 h1 {
@@ -77,6 +73,10 @@ h2.tagline {
     font-size: 120%;
 }
 
+.game-container {
+    position: relative;
+}
+
 .canvas {
     position: relative;
     background-color: #111;
@@ -86,6 +86,20 @@ h2.tagline {
     min-height: 500px;
 
     z-index: 1;
+}
+
+.score {
+    position: absolute;
+    top: 15px;
+    left: 7%;
+    z-index: 4;
+
+    letter-spacing: 0.4px;
+    font-weight: 400;
+
+    opacity: 0.7;
+    color: var(--light-blue);
+    text-shadow: 1px 1px 4px hsl(180, 53%, 52%, 0.4);
 }
 
 .splash-screen {

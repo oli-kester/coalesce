@@ -51,9 +51,8 @@ function Coalesce() {
           <h2 className="tagline">Pure Reactive Play.</h2>
         </div>
         <GameCanvas clock={clock} toggleClockActive={toggleClockActive} resetClock={resetClock} />
-        <div className="score-bar">
-          <h3>Score -</h3>
-          <h3>{clock}</h3>
+        <div className="bottom-bar">
+          <p>Made in 2020 by Oliver Reynolds. </p>
         </div>
       </div>
     </ColourSchemeContext.Provider>
