@@ -30,6 +30,7 @@ function GameCanvas({ clock, toggleClockActive }) {
     CANVAS_STARTING_SIZE - MARGIN_SIZE * 2,
   ));
   const [displaySplashScreen, setDisplaySplashScreen] = useState(true);
+  const [displayGameOverScreen, setDisplayGameOverScreen] = useState(false);
 
   // ----------------------------- SPRITE CONFIG -------------------------
   const BREATHING_ANIMATION_SPEED = 4;
@@ -222,13 +223,17 @@ function GameCanvas({ clock, toggleClockActive }) {
         if (currSprite.type === SPRITE_TYPES.FOOD) {
           newPlayerSpriteData.bounds.radius += PLAYER_SPRITE_GROWTH_RATE;
         } else {
-          // TODO game over when sprite size is zero
           newPlayerSpriteData.bounds.radius -= PLAYER_SPRITE_GROWTH_RATE;
         }
         newPlayerSpriteData.animationState.radius = newPlayerSpriteData.bounds.radius - 1;
         setPlayerSpriteData(newPlayerSpriteData);
         npcSprites.splice(i, 1);
         i -= 1;
+        // game over when sprite size is zero
+        if (newPlayerSpriteData.bounds.radius <= 0) {
+          toggleClockActive();
+          setDisplayGameOverScreen(true);
+        }
       }
     }
 
@@ -242,6 +247,7 @@ function GameCanvas({ clock, toggleClockActive }) {
       setPlayerMovementSpeed(playerMovementSpeed * incrementFactor);
       setSpriteTypeSkew(spriteTypeSkew * incrementFactor);
     }
+    // TODO remove all react-hooks/exhaustive-deps errors hidden by these rules
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
 
