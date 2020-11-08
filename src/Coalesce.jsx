@@ -12,8 +12,6 @@ const COLOUR_SCHEME = {
 
 export const ColourSchemeContext = createContext(COLOUR_SCHEME);
 
-// TODO make content always fill screen (hide scrollbars)
-
 function Coalesce() {
   const UPDATE_INTERVAL = 4.17; // this is 240Hz in ms.
 

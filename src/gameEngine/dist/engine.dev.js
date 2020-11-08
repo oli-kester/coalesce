@@ -125,6 +125,7 @@ function collisionCheck(circle1, circle2) {
 
 
 function SpawnRing(xPos, yPos, radius) {
+  // TODO make this an ellipsis to deal with rectangular windows
   var circle = CircleObject(xPos, yPos, radius);
   return _objectSpread({}, circle, {
     /**

@@ -84,6 +84,7 @@ export function collisionCheck(circle1, circle2) {
  * @param {*} radius - Radius of ring
  */
 export function SpawnRing(xPos, yPos, radius) {
+  // TODO make this an ellipsis to deal with rectangular windows
   const circle = CircleObject(xPos, yPos, radius);
 
   return {
