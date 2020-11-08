@@ -1,5 +1,5 @@
 import React, {
-  createContext, useEffect, useState,
+  createContext, useEffect, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import useDimensions from 'react-use-dimensions';
@@ -69,6 +69,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
   const [spriteTypeSkew, setSpriteTypeSkew] = useState(STARTING_SPRITE_TYPE_SKEW);
 
   // --------------------------- KEYBOARD HANDLERS  ----------------------
+  const keyboardRef = useRef();
   function keyDown(event) {
     const newMovementStatus = { ...playerMovementStatus };
     switch (event.key) {
@@ -148,9 +149,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
   // clock-triggered block
   useEffect(() => {
     // lock keyboard focus to player
-    if (canvasRef.current !== undefined) {
-      canvasRef.current.focus();
-    }
+    keyboardRef.current.focus();
 
     // spawn new sprites
     if (clock % npcSpawnInterval === 0) {
@@ -265,7 +264,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
 
   // ----------------------------- RENDERING -------------------------
   return (
-    <div>
+    <div role="button" onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} ref={keyboardRef} style={{ width: '100%', height: '100%' }}>
       <StartDialog toggleClockActive={toggleClockActive} />
       <EndDialog
         resetGame={reset}
@@ -273,7 +272,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
         setDisplayEndDialog={setDisplayEndDialog}
         clock={clock}
       />
-      <svg onKeyDown={keyDown} onKeyUp={keyUp} tabIndex={0} className="canvas" ref={canvasRef}>
+      <svg className="canvas" ref={canvasRef}>
         <PlayerSprite
           xPos={playerSpriteData.bounds.xPos}
           yPos={playerSpriteData.bounds.yPos}
@@ -292,7 +291,7 @@ function GameCanvas({ clock, toggleClockActive, resetClock }) {
           ))}
         </SpriteTypesContext.Provider>
       </svg>
-    </div>
+    </div >
   );
 }
 

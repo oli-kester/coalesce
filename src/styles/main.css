@@ -82,6 +82,8 @@ h2.tagline {
     background-color: #111;
     width: 90%;
     height: 80vh;
+    min-width: 500px;
+    min-height: 500px;
 
     z-index: 1;
 }
@@ -102,6 +104,8 @@ h2.tagline {
 
     height: 60%;
     width: 50%;
+    min-width: 400px;
+    min-height: 300px;
     padding: 10px 30px 10px 30px;
 
     background-color: hsla(180, 10%, 10%, 0.9);
