@@ -1,5 +1,7 @@
 # Coalesce
 
+A pure React browser game. 
+
 <p align="center">
   <a href="https://shazam2discogs.olikester.com">
     <img
